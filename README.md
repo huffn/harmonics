@@ -61,7 +61,7 @@ To run ShadoWord on your own machine for development or personal play:
 ## ☕ Support the Project
 If you enjoy the game and want to support its development and server costs, consider buying me a coffee!
 
-<a href="https://www.buymeacoffee.com/YOUR_USERNAME" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me A Coffee" style="height: 60px !important;width: 217px !important;" ></a>
+<a href="https://buymeacoffee.com/shadoword" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me A Coffee" style="height: 60px !important;width: 217px !important;" ></a>
 
 ## 🤝 Acknowledgments & Disclaimers
 
