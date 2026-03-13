@@ -30,7 +30,7 @@ To run ShadoWord on your own machine for development or personal play:
 
 1. **Clone the repository:**
    ```bash
-   git clone [https://github.com/Spartoons/ShadoWord.git](https://github.com/Spartoons/ShadoWord.git)
+   git clone https://github.com/Spartoons/ShadoWord.git
    cd ShadoWord
    ```
 
