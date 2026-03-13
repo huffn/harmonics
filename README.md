@@ -9,7 +9,7 @@
 **ShadoWord** is a multilingual, math-based twist on the classic daily word game. Instead of relying on green and yellow letter clues, players deduce the hidden word by analyzing its numerical "wave" and narrowing down the shrinking shadow boundaries.
 
 <div align="center">
-  <img src="gameplay.png" alt="ShadoWord Gameplay" width="400">
+  <img src="assets/gameplay.png" alt="ShadoWord Gameplay" width="400">
 </div>
 
 ## 🧠 The Math Behind the Game
@@ -30,8 +30,8 @@ To run ShadoWord on your own machine for development or personal play:
 
 1. **Clone the repository:**
    ```bash
-   git clone [https://github.com/YOUR_USERNAME/shadoword.git](https://github.com/YOUR_USERNAME/shadoword.git)
-   cd shadoword
+   git clone [https://github.com/Spartoons/ShadoWord.git](https://github.com/Spartoons/ShadoWord.git)
+   cd ShadoWord
    ```
 
 2. **Set up a virtual environment (optional but recommended):**
