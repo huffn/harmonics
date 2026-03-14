@@ -54,16 +54,17 @@ HTML_TEMPLATE = """
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <title>ShadoWord</title>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <meta property="og:title" content="ShadoWord – Infinite Shadow Word Puzzle">
     <meta property="og:description" content="Guess the hidden word using shrinking constraint shadows. Infinite puzzles.">
-    <meta property="og:image" content="https://shadoword.onrender.com/assets/preview.png">
+    <meta property="og:image" content="https://shadoword.onrender.com/static/preview.png">
     <meta property="og:url" content="https://shadoword.onrender.com/">
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="ShadoWord">
 
-    <title>ShadoWord</title>
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>ƒ</text></svg>">
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.2/dist/chart.umd.min.js"></script>
     <style>
