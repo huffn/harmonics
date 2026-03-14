@@ -103,7 +103,7 @@ HTML_TEMPLATE = """
         /* --- NEW LAYOUT FOR SIDE ADS --- */
         .layout-wrapper {
             display: grid;
-            grid-template-columns: 1fr auto 1fr;
+            grid-template-columns: 1fr min(100%, 500px) 1fr;
             align-items: start;
             width: 100%;
         }
