@@ -331,11 +331,8 @@ HTML_TEMPLATE = """
                             <option value="es">ES</option>
                             <option value="ca">CA</option>
                         </select>
-                        <button class="icon-btn" onclick="toggleGuidelines()" title="Toggle Guide Lines">
-                            <svg viewBox="0 0 24 24"><path d="M4 19h16v2H4v-2zm0-4h16v2H4v-2zm0-4h16v2H4V7zm0-4h16v2H4V3z"/></svg>
-                        </button>
-                        <button class="icon-btn" onclick="toggleTheme()">
-                            <svg id="themeIcon" viewBox="0 0 24 24"><path d="M12 3c-4.97 0-9 4.03-9 9s4.03 9 9 9 9-4.03 9-9c0-.46-.04-.92-.1-1.36-.98 1.37-2.58 2.26-4.4 2.26-3.03 0-5.5-2.47-5.5-5.5 0-1.82.89-3.42 2.26-4.4C12.92 3.04 12.46 3 12 3z"/></svg>
+                        <button class="icon-btn" onclick="openModal('configModal')" title="Settings">
+                            <svg viewBox="0 0 24 24"><path d="M19.14,12.94c0.04-0.3,0.06-0.61,0.06-0.94c0-0.32-0.02-0.64-0.06-0.94l2.03-1.58c0.18-0.14,0.23-0.41,0.12-0.61 l-1.92-3.32c-0.12-0.22-0.37-0.29-0.59-0.22l-2.39,0.96c-0.5-0.38-1.03-0.7-1.62-0.94L14.4,2.81c-0.04-0.24-0.24-0.41-0.48-0.41 h-3.84c-0.24,0-0.43,0.17-0.47,0.41L9.25,5.35C8.66,5.59,8.12,5.92,7.63,6.29L5.24,5.33c-0.22-0.08-0.47,0-0.59,0.22L2.73,8.87 C2.62,9.08,2.66,9.34,2.86,9.48l2.03,1.58C4.84,11.36,4.8,11.69,4.8,12s0.02,0.64,0.06,0.94l-2.03,1.58 c-0.18,0.14-0.23,0.41-0.12,0.61l1.92,3.32c0.12,0.22,0.37,0.29,0.59,0.22l2.39-0.96c0.5,0.38,1.03,0.7,1.62,0.94l0.36,2.54 c0.05,0.24,0.24,0.41,0.48,0.41h3.84c0.24,0,0.44-0.17,0.47-0.41l0.36-2.54c0.59-0.24,1.13-0.56,1.62-0.94l2.39,0.96 c0.22,0.08,0.47,0,0.59-0.22l1.92-3.32c0.12-0.22,0.07-0.49-0.12-0.61L19.14,12.94z M12,15.6c-1.98,0-3.6-1.62-3.6-3.6 s1.62-3.6,3.6-3.6s3.6,1.62,3.6,3.6S13.98,15.6,12,15.6z"/></svg>
                         </button>
                         <button class="icon-btn" onclick="openModal('statsModal'); renderStats();">
                             <svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"/></svg>
@@ -376,42 +373,7 @@ HTML_TEMPLATE = """
 
                 <div id="history"></div>
 
-                <div class="keyboard" id="keyboardContainer">
-                    <div class="key-row">
-                        <button class="key" onclick="handleKey('A')">A</button>
-                        <button class="key" onclick="handleKey('B')">B</button>
-                        <button class="key" onclick="handleKey('C')">C</button>
-                        <button class="key" onclick="handleKey('D')">D</button>
-                        <button class="key" onclick="handleKey('E')">E</button>
-                        <button class="key" onclick="handleKey('F')">F</button>
-                        <button class="key" onclick="handleKey('G')">G</button>
-                        <button class="key" onclick="handleKey('H')">H</button>
-                        <button class="key" onclick="handleKey('I')">I</button>
-                    </div>
-                    <div class="key-row">
-                        <button class="key" onclick="handleKey('J')">J</button>
-                        <button class="key" onclick="handleKey('K')">K</button>
-                        <button class="key" onclick="handleKey('L')">L</button>
-                        <button class="key" onclick="handleKey('M')">M</button>
-                        <button class="key" onclick="handleKey('N')">N</button>
-                        <button class="key" onclick="handleKey('O')">O</button>
-                        <button class="key" onclick="handleKey('P')">P</button>
-                        <button class="key" onclick="handleKey('Q')">Q</button>
-                        <button class="key" onclick="handleKey('R')">R</button>
-                    </div>
-                    <div class="key-row">
-                        <button class="key wide" onclick="handleKey('ENTER')">ENTER</button>
-                        <button class="key" onclick="handleKey('S')">S</button>
-                        <button class="key" onclick="handleKey('T')">T</button>
-                        <button class="key" onclick="handleKey('U')">U</button>
-                        <button class="key" onclick="handleKey('V')">V</button>
-                        <button class="key" onclick="handleKey('W')">W</button>
-                        <button class="key" onclick="handleKey('X')">X</button>
-                        <button class="key" onclick="handleKey('Y')">Y</button>
-                        <button class="key" onclick="handleKey('Z')">Z</button>
-                        <button class="key wide" onclick="handleKey('DEL')">DEL</button>
-                    </div>
-                </div>
+                <div class="keyboard" id="keyboardContainer"></div>
             </div>
 
             <div class="side-panel right">
@@ -482,6 +444,28 @@ HTML_TEMPLATE = """
         </div>
     </div>
 
+    <div id="configModal" class="modal" onclick="closeModalOnBg(event, 'configModal')">
+        <div class="modal-content">
+            <button class="close-btn" onclick="closeModal('configModal')">&times;</button>
+            <h2 id="txt-config-title">Settings</h2>
+            
+            <div style="display: flex; flex-direction: column; gap: 15px; margin-top: 20px;">
+                <button class="action-btn secondary" style="display: flex; justify-content: space-between;" onclick="toggleTheme()">
+                    <span>Theme</span>
+                    <span id="txt-cfg-theme-val">Dark</span> 
+                </button>
+                <button class="action-btn secondary" style="display: flex; justify-content: space-between;" onclick="toggleGuidelines()">
+                    <span>Guide Lines</span>
+                    <span id="txt-cfg-guide-val">Hidden</span> 
+                </button>
+                <button class="action-btn secondary" style="display: flex; justify-content: space-between;" onclick="toggleKeyboard()">
+                    <span>Keyboard</span>
+                    <span id="txt-cfg-kbd-val">QWERTY</span> 
+                </button>
+            </div>
+        </div>
+    </div>
+
     <script>
         // --- TRANSLATIONS ---
         const i18n = {
@@ -538,6 +522,58 @@ HTML_TEMPLATE = """
         let currentFinalTargetWave = null; 
         let showGuidelines = false;
 
+        // Keyboard State
+        let keyboardLayout = localStorage.getItem('shadowKeyboard') || 'qwerty';
+
+        const KEYBOARD_LAYOUTS = {
+            qwerty: [
+                ['Q','W','E','R','T','Y','U','I','O','P'],
+                ['A','S','D','F','G','H','J','K','L'],
+                ['ENTER','Z','X','C','V','B','N','M','DEL']
+            ],
+            alpha: [
+                ['A','B','C','D','E','F','G','H','I'],
+                ['J','K','L','M','N','O','P','Q','R'],
+                ['ENTER','S','T','U','V','W','X','Y','Z','DEL']
+            ]
+        };
+
+        // Render the keyboard dynamically based on selected layout
+        function renderKeyboard() {
+            const container = document.getElementById('keyboardContainer');
+            container.innerHTML = ''; 
+            const layout = KEYBOARD_LAYOUTS[keyboardLayout];
+
+            layout.forEach(row => {
+                const rowDiv = document.createElement('div');
+                rowDiv.className = 'key-row';
+                row.forEach(key => {
+                    const btn = document.createElement('button');
+                    btn.className = 'key' + (key === 'ENTER' || key === 'DEL' ? ' wide' : '');
+                    btn.onclick = () => handleKey(key);
+                    btn.innerText = key;
+                    rowDiv.appendChild(btn);
+                });
+                container.appendChild(rowDiv);
+            });
+            
+            // Update the text in the config modal
+            const kbdStatusEl = document.getElementById('txt-kbd-status');
+            if (kbdStatusEl) kbdStatusEl.innerText = keyboardLayout.toUpperCase();
+        }
+
+        // Function to toggle between layouts
+        function toggleKeyboard() {
+            keyboardLayout = keyboardLayout === 'qwerty' ? 'alpha' : 'qwerty';
+            localStorage.setItem('shadowKeyboard', keyboardLayout);
+            
+            // Update button text
+            const kbdValEl = document.getElementById('txt-cfg-kbd-val');
+            if (kbdValEl) kbdValEl.innerText = keyboardLayout === 'qwerty' ? 'QWERTY' : 'Alphabetical';
+            
+            renderKeyboard();
+        }
+
         // LOAD THEME
         if(localStorage.getItem('theme') === 'light') document.body.classList.add('light-mode');
 
@@ -578,6 +614,7 @@ HTML_TEMPLATE = """
         drawChart([]); 
         centerChart(); // Center alphabet vertically on page load
         applyTranslations();
+        renderKeyboard();
 
         function applyTranslations() {
             const l = i18n[currentLang];
@@ -604,12 +641,23 @@ HTML_TEMPLATE = """
 
         function toggleTheme() {
             document.body.classList.toggle('light-mode');
-            localStorage.setItem('theme', document.body.classList.contains('light-mode') ? 'light' : 'dark');
+            const isLight = document.body.classList.contains('light-mode');
+            localStorage.setItem('theme', isLight ? 'light' : 'dark');
+            
+            // Update button text
+            const themeValEl = document.getElementById('txt-cfg-theme-val');
+            if (themeValEl) themeValEl.innerText = isLight ? 'Light' : 'Dark';
+            
             if(chart) drawChart(guessHistory, currentFinalTargetWave); 
         }
 
         function toggleGuidelines() {
             showGuidelines = !showGuidelines;
+            
+            // Update button text
+            const guideValEl = document.getElementById('txt-cfg-guide-val');
+            if (guideValEl) guideValEl.innerText = showGuidelines ? 'Visible' : 'Hidden';
+
             if(chart) {
                 chart.options.scales.y.grid.color = (ctx) => {
                     if(!showGuidelines) return 'transparent';
