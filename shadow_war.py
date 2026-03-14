@@ -1412,6 +1412,12 @@ def terms():
 def about():
     return render_template_string(ABOUT_HTML)
 
+@app.route('/ads.txt')
+def ads_txt():
+    # Google's standard ads.txt line for AdSense
+    ads_content = "google.com, pub-2459227402455868, DIRECT, f08c47fec0942fa0"
+    return ads_content, 200, {'Content-Type': 'text/plain'}
+
 if __name__ == '__main__':
     # Use environment variables for the port (required by many cloud hosts)
     # Turn debug=False to prevent security vulnerabilities in production
