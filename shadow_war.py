@@ -280,9 +280,26 @@ HTML_TEMPLATE = """
             border: none; color: var(--text-muted); font-size: 20px; cursor: pointer;
         }
         .modal h2 { margin-top: 0; font-size: 20px; border-bottom: 1px solid var(--border-color); padding-bottom: 10px; }
-        .stats-grid { display: flex; gap: 15px; justify-content: center; margin: 20px 0; text-align: center; }
-        .stat-box .val { font-size: 24px; font-weight: bold; }
-        .stat-box .lbl { font-size: 11px; color: var(--text-muted); text-transform: uppercase; }
+        
+        .stats-grid { 
+            display: flex; gap: 10px; justify-content: space-between; 
+            margin: 25px 0; text-align: center; 
+        }
+        .stat-box { 
+            flex: 1; 
+            background: var(--box-bg); 
+            padding: 15px 5px; 
+            border-radius: 8px; 
+            border: 1px solid var(--border-color); 
+            box-shadow: 0 4px 6px var(--shadow-fill);
+        }
+        .stat-box .val { 
+            font-size: 28px; font-weight: bold; color: var(--text-color); 
+        }
+        .stat-box .lbl { 
+            font-size: 11px; color: var(--text-muted); text-transform: uppercase; 
+            margin-top: 5px; font-weight: 600; letter-spacing: 0.5px;
+        }
 
         /* --- MOBILE RESPONSIVENESS FIXES --- */
         @media (max-width: 450px) {
@@ -487,6 +504,7 @@ HTML_TEMPLATE = """
                 h_4: "Use the shrinking boundaries to deduce the correct letters!",
                 h_5: "<strong>Tip:</strong> Click the mini-charts in your history to hide/show those lines on the main board!",
                 h_foot: 'Inspired by the original <strong>WordWavr</strong> concept (<a href="https://wordwavr.app" target="_blank" style="color: var(--accent); text-decoration: underline;">wordwavr.app</a>). If you enjoy this twist, be sure to check that out!<br><div style="margin-top: 15px; font-size: 13px; font-weight: bold;"><a href="/about" style="color: var(--accent);">Read full rules & About</a></div><div style="margin-top: 10px; font-size: 11px; opacity: 0.7;"><a href="/privacy" style="color: inherit; margin-right: 10px;">Privacy Policy</a> | <a href="/terms" style="color: inherit; margin-left: 10px;">Terms of Service</a></div>',
+                s_title: "Statistics", s_play: "Played", s_win: "Win %", s_streak: "Streak", s_max: "Max",
                 coffee: "Buy me a Coffee", msg_need: "Need 5 letters.", msg_copy: "Results copied to clipboard!",
                 msg_win: "🎉 Correct!", msg_over: "Game Over! Word was "
             },
@@ -519,6 +537,35 @@ HTML_TEMPLATE = """
                 msg_win: "🎉 Correcte!", msg_over: "Fi del joc! Era "
             }
         };
+
+        function restoreGameState() {
+            const saved = localStorage.getItem('shadowGameState');
+            if (!saved) return; // No saved game, do nothing
+            
+            const state = JSON.parse(saved);
+            guessHistory = state.history || [];
+            gameActive = state.active;
+            gameWon = state.won;
+            currentFinalTargetWave = state.targetWave || null;
+            attemptCount = guessHistory.length;
+
+            // Rebuild the history UI
+            document.getElementById('history').innerHTML = ''; 
+            guessHistory.forEach((h, index) => {
+                addHistoryRow(index + 1, h.wordString, h.similarity, h);
+            });
+
+            // Rebuild the board UI
+            updateDots();
+            drawChart(guessHistory, currentFinalTargetWave);
+
+            // If the game was already over, lock it down
+            if (!gameActive) {
+                document.getElementById('keyboardContainer').style.display = 'none';
+                document.querySelectorAll('.action-btn').forEach(btn => btn.style.display = 'flex');
+                showMessage(state.savedMsg, state.savedMsgColor, true);
+            }
+        }
 
         let chart;
         let attemptCount = 0;
@@ -623,6 +670,7 @@ HTML_TEMPLATE = """
         centerChart(); // Center alphabet vertically on page load
         applyTranslations();
         renderKeyboard();
+        restoreGameState();
 
         function applyTranslations() {
             const l = i18n[currentLang];
@@ -761,6 +809,7 @@ HTML_TEMPLATE = """
                 attemptCount++;
                 
                 guessHistory.push({
+                    wordString: guess.toUpperCase(),
                     guess: data.wave,
                     upper: data.upper_bound,
                     lower: data.lower_bound,
@@ -785,6 +834,15 @@ HTML_TEMPLATE = """
                     showMessage(i18n[currentLang].msg_over + data.target_word, "var(--accent-guess)", true);
                     endGame(data.target_wave);
                 }
+
+                localStorage.setItem('shadowGameState', JSON.stringify({
+                    history: guessHistory,
+                    active: gameActive,
+                    won: gameWon,
+                    targetWave: currentFinalTargetWave,
+                    savedMsg: document.getElementById('message').innerText,
+                    saveMsgColor: document.getElementById('message').style.color
+                }));
             });
         }
 
@@ -876,6 +934,8 @@ HTML_TEMPLATE = """
                 gameActive = true;
                 gameWon = false;
                 currentFinalTargetWave = null;
+
+                localStorage.removeItem('shadowGameState');
                 
                 document.getElementById('history').innerHTML = '';
                 document.getElementById('keyboardContainer').style.display = 'flex';
