@@ -476,15 +476,15 @@ HTML_TEMPLATE = """
             
             <div style="display: flex; flex-direction: column; gap: 15px; margin-top: 20px;">
                 <button class="action-btn secondary" style="display: flex; justify-content: space-between;" onclick="toggleTheme()">
-                    <span>Theme</span>
+                    <span id="txt-cfg-theme">Theme</span>
                     <span id="txt-cfg-theme-val">Dark</span> 
                 </button>
                 <button class="action-btn secondary" style="display: flex; justify-content: space-between;" onclick="toggleGuidelines()">
-                    <span>Guide Lines</span>
+                    <span id="txt-cfg-guide">Guide Lines</span>
                     <span id="txt-cfg-guide-val">Hidden</span> 
                 </button>
                 <button class="action-btn secondary" style="display: flex; justify-content: space-between;" onclick="toggleKeyboard()">
-                    <span>Keyboard</span>
+                    <span id="txt-cfg-kbd">Keyboard</span>
                     <span id="txt-cfg-kbd-val">QWERTY</span> 
                 </button>
             </div>
@@ -503,10 +503,12 @@ HTML_TEMPLATE = """
                 h_3: "The dashed lines show the upper and lower limits. The closer your guess is to the target, the narrower the shadow becomes.",
                 h_4: "Use the shrinking boundaries to deduce the correct letters!",
                 h_5: "<strong>Tip:</strong> Click the mini-charts in your history to hide/show those lines on the main board!",
-                h_foot: 'Inspired by the original <strong>WordWavr</strong> concept (<a href="https://wordwavr.app" target="_blank" style="color: var(--accent); text-decoration: underline;">wordwavr.app</a>). If you enjoy this twist, be sure to check that out!<br><div style="margin-top: 15px; font-size: 13px; font-weight: bold;"><a href="/about" style="color: var(--accent);">Read full rules & About</a></div><div style="margin-top: 10px; font-size: 11px; opacity: 0.7;"><a href="/privacy" style="color: inherit; margin-right: 10px;">Privacy Policy</a> | <a href="/terms" style="color: inherit; margin-left: 10px;">Terms of Service</a></div>',
-                s_title: "Statistics", s_play: "Played", s_win: "Win %", s_streak: "Streak", s_max: "Max",
+                h_foot: 'Inspired by the original <strong>WordWavr</strong> concept (<a href="https://wordwavr.app" target="_blank" style="color: var(--accent); text-decoration: underline;">wordwavr.app</a>). If you enjoy this twist, be sure to check that out!<br><div style="margin-top: 15px; font-size: 13px; font-weight: bold;"><a href="/about" style="color: var(--accent);">Read full rules & About</a></div><div style="margin-top: 10px; font-size: 11px; opacity: 0.7;"><a href="/privacy" style="color: inherit; margin-right: 10px;">Privacy Policy</a> | <a href="/terms" style="color: inherit; margin: 0 10px;">Terms of Service</a> | <a href="/contact" style="color: inherit; margin-left: 10px;">Contact Us</a></div>',                s_title: "Statistics", s_play: "Played", s_win: "Win %", s_streak: "Streak", s_max: "Max",
                 coffee: "Buy me a Coffee", msg_need: "Need 5 letters.", msg_copy: "Results copied to clipboard!",
-                msg_win: "🎉 Correct!", msg_over: "Game Over! Word was "
+                msg_win: "🎉 Correct!", msg_over: "Game Over! Word was ",
+                cfg_title: "Settings", cfg_theme: "Theme", cfg_theme_dark: "Dark", cfg_theme_light: "Light", 
+                cfg_guide: "Guide Lines", cfg_guide_vis: "Visible", cfg_guide_hid: "Hidden", 
+                cfg_kbd: "Keyboard", cfg_kbd_qwerty: "QWERTY", cfg_kbd_alpha: "Alphabetical"
             },
             es: {
                 play_again: "JUGAR DE NUEVO", share: "COMPARTIR", coffee_main: "Café",
@@ -517,10 +519,12 @@ HTML_TEMPLATE = """
                 h_3: "Las líneas muestran los límites. Cuanto más cerca esté tu intento, más estrecha será la sombra.",
                 h_4: "¡Usa estos límites para deducir las letras correctas!",
                 h_5: "<strong>Consejo:</strong> ¡Haz clic en los mini-gráficos para ocultar/mostrar líneas en el tablero!",
-                h_foot: 'Inspirado en el concepto original de <strong>WordWavr</strong> (<a href="https://wordwavr.app" target="_blank" style="color: var(--accent); text-decoration: underline;">wordwavr.app</a>).<br><div style="margin-top: 15px; font-size: 13px; font-weight: bold;"><a href="/about" style="color: var(--accent);">Leer reglas completas y Acerca de</a></div><div style="margin-top: 10px; font-size: 11px; opacity: 0.7;"><a href="/privacy" style="color: inherit; margin-right: 10px;">Política de Privacidad</a> | <a href="/terms" style="color: inherit; margin-left: 10px;">Términos de Servicio</a></div>',
-                s_title: "Estadísticas", s_play: "Jugado", s_win: "% Victorias", s_streak: "Racha", s_max: "Máx",
+                h_foot: 'Inspirado en el concepto original de <strong>WordWavr</strong> (<a href="https://wordwavr.app" target="_blank" style="color: var(--accent); text-decoration: underline;">wordwavr.app</a>).<br><div style="margin-top: 15px; font-size: 13px; font-weight: bold;"><a href="/about" style="color: var(--accent);">Leer reglas completas y Acerca de</a></div><div style="margin-top: 10px; font-size: 11px; opacity: 0.7;"><a href="/privacy" style="color: inherit; margin-right: 10px;">Política de Privacidad</a> | <a href="/terms" style="color: inherit; margin: 0 10px;">Términos de Servicio</a> | <a href="/contact" style="color: inherit; margin-left: 10px;">Contacto</a></div>',                s_title: "Estadísticas", s_play: "Jugado", s_win: "% Victorias", s_streak: "Racha", s_max: "Máx",
                 coffee: "Invítame un Café", msg_need: "Necesitas 5 letras.", msg_copy: "¡Copiado al portapapeles!",
-                msg_win: "🎉 ¡Correcto!", msg_over: "¡Fin del juego! Era "
+                msg_win: "🎉 ¡Correcto!", msg_over: "¡Fin del juego! Era ",
+                cfg_title: "Ajustes", cfg_theme: "Tema", cfg_theme_dark: "Oscuro", cfg_theme_light: "Claro", 
+                cfg_guide: "Líneas Guía", cfg_guide_vis: "Visible", cfg_guide_hid: "Oculto", 
+                cfg_kbd: "Teclado", cfg_kbd_qwerty: "QWERTY", cfg_kbd_alpha: "Alfabético"
             },
             ca: {
                 play_again: "JUGAR DE NOU", share: "COMPARTIR", coffee_main: "Cafè",
@@ -531,10 +535,13 @@ HTML_TEMPLATE = """
                 h_3: "Les línies mostren els límits. Com més a prop estigui el teu intent, més estreta serà l'ombra.",
                 h_4: "Utilitza aquests límits per deduir les lletres correctes!",
                 h_5: "<strong>Consell:</strong> Fes clic als mini-gràfics per ocultar/mostrar línies al tauler!",
-                h_foot: 'Inspirat en el concepte original de <strong>WordWavr</strong> (<a href="https://wordwavr.app" target="_blank" style="color: var(--accent); text-decoration: underline;">wordwavr.app</a>).<br><div style="margin-top: 15px; font-size: 13px; font-weight: bold;"><a href="/about" style="color: var(--accent);">Llegir regles completes i Sobre</a></div><div style="margin-top: 10px; font-size: 11px; opacity: 0.7;"><a href="/privacy" style="color: inherit; margin-right: 10px;">Política de Privacitat</a> | <a href="/terms" style="color: inherit; margin-left: 10px;">Termes de Servei</a></div>',
+                h_foot: 'Inspirat en el concepte original de <strong>WordWavr</strong> (<a href="https://wordwavr.app" target="_blank" style="color: var(--accent); text-decoration: underline;">wordwavr.app</a>).<br><div style="margin-top: 15px; font-size: 13px; font-weight: bold;"><a href="/about" style="color: var(--accent);">Llegir regles completes i Sobre</a></div><div style="margin-top: 10px; font-size: 11px; opacity: 0.7;"><a href="/privacy" style="color: inherit; margin-right: 10px;">Política de Privacitat</a> | <a href="/terms" style="color: inherit; margin: 0 10px;">Termes de Servei</a> | <a href="/contact" style="color: inherit; margin-left: 10px;">Contacte</a></div>',
                 s_title: "Estadístiques", s_play: "Jugat", s_win: "% Victòries", s_streak: "Ratxa", s_max: "Màx",
                 coffee: "Convida'm a un Cafè", msg_need: "Necessites 5 lletres.", msg_copy: "Copiat al porta-retalls!",
-                msg_win: "🎉 Correcte!", msg_over: "Fi del joc! Era "
+                msg_win: "🎉 Correcte!", msg_over: "Fi del joc! Era ",
+                cfg_title: "Configuració", cfg_theme: "Tema", cfg_theme_dark: "Fosc", cfg_theme_light: "Clar", 
+                cfg_guide: "Línies Guia", cfg_guide_vis: "Visible", cfg_guide_hid: "Ocult", 
+                cfg_kbd: "Teclat", cfg_kbd_qwerty: "QWERTY", cfg_kbd_alpha: "Alfabètic"
             }
         };
 
@@ -562,7 +569,7 @@ HTML_TEMPLATE = """
             // If the game was already over, lock it down
             if (!gameActive) {
                 document.getElementById('keyboardContainer').style.display = 'none';
-                document.querySelectorAll('.action-btn').forEach(btn => btn.style.display = 'flex');
+                document.querySelectorAll('.btn-row .action-btn').forEach(btn => btn.style.display = 'flex');
                 showMessage(state.savedMsg, state.savedMsgColor, true);
             }
         }
@@ -578,7 +585,13 @@ HTML_TEMPLATE = """
         let showGuidelines = false;
 
         // Keyboard State
-        let keyboardLayout = localStorage.getItem('shadowKeyboard') || 'qwerty';
+        let keyboardLayout = localStorage.getItem('shadowKeyboard');
+        if (!keyboardLayout) {
+            // Detect "tactical" (touch) devices vs desktop
+            const isTouch = (('ontouchstart' in window) || (navigator.maxTouchPoints > 0));
+            keyboardLayout = isTouch ? 'qwerty' : 'alpha';
+            localStorage.setItem('shadowKeyboard', keyboardLayout); // Remember forever
+        }
 
         const KEYBOARD_LAYOUTS = {
             qwerty: [
@@ -622,13 +635,13 @@ HTML_TEMPLATE = """
             keyboardLayout = keyboardLayout === 'qwerty' ? 'alpha' : 'qwerty';
             localStorage.setItem('shadowKeyboard', keyboardLayout);
             
-            // Update button text
+            // Update button text using active language
+            const l = i18n[currentLang];
             const kbdValEl = document.getElementById('txt-cfg-kbd-val');
-            if (kbdValEl) kbdValEl.innerText = keyboardLayout === 'qwerty' ? 'QWERTY' : 'Alphabetical';
+            if (kbdValEl) kbdValEl.innerText = keyboardLayout === 'qwerty' ? l.cfg_kbd_qwerty : l.cfg_kbd_alpha;
             
             renderKeyboard();
         }
-
         // LOAD THEME
         if(localStorage.getItem('theme') === 'light') document.body.classList.add('light-mode');
 
@@ -693,6 +706,14 @@ HTML_TEMPLATE = """
             document.getElementById('txt-stat-max').innerText = l.s_max;
             document.getElementById('txt-coffee-1').innerText = l.coffee;
             document.getElementById('txt-coffee-2').innerText = l.coffee;
+            document.getElementById('txt-config-title').innerText = l.cfg_title;
+            document.getElementById('txt-cfg-theme').innerText = l.cfg_theme;
+            document.getElementById('txt-cfg-guide').innerText = l.cfg_guide;
+            document.getElementById('txt-cfg-kbd').innerText = l.cfg_kbd;
+            const isLight = document.body.classList.contains('light-mode');
+            document.getElementById('txt-cfg-theme-val').innerText = isLight ? l.cfg_theme_light : l.cfg_theme_dark;
+            document.getElementById('txt-cfg-guide-val').innerText = showGuidelines ? l.cfg_guide_vis : l.cfg_guide_hid;
+            document.getElementById('txt-cfg-kbd-val').innerText = keyboardLayout === 'qwerty' ? l.cfg_kbd_qwerty : l.cfg_kbd_alpha;
         }
 
         function toggleTheme() {
@@ -700,9 +721,10 @@ HTML_TEMPLATE = """
             const isLight = document.body.classList.contains('light-mode');
             localStorage.setItem('theme', isLight ? 'light' : 'dark');
             
-            // Update button text
+            // Update button text using active language
+            const l = i18n[currentLang];
             const themeValEl = document.getElementById('txt-cfg-theme-val');
-            if (themeValEl) themeValEl.innerText = isLight ? 'Light' : 'Dark';
+            if (themeValEl) themeValEl.innerText = isLight ? l.cfg_theme_light : l.cfg_theme_dark;
             
             if(chart) drawChart(guessHistory, currentFinalTargetWave); 
         }
@@ -710,9 +732,10 @@ HTML_TEMPLATE = """
         function toggleGuidelines() {
             showGuidelines = !showGuidelines;
             
-            // Update button text
+            // Update button text using active language
+            const l = i18n[currentLang];
             const guideValEl = document.getElementById('txt-cfg-guide-val');
-            if (guideValEl) guideValEl.innerText = showGuidelines ? 'Visible' : 'Hidden';
+            if (guideValEl) guideValEl.innerText = showGuidelines ? l.cfg_guide_vis : l.cfg_guide_hid;
 
             if(chart) {
                 chart.options.scales.y.grid.color = (ctx) => {
@@ -916,7 +939,7 @@ HTML_TEMPLATE = """
             currentFinalTargetWave = finalTargetWave; 
             document.getElementById('keyboardContainer').style.display = 'none';
             
-            const actionBtns = document.querySelectorAll('.action-btn');
+            const actionBtns = document.querySelectorAll('.btn-row .action-btn');
             actionBtns.forEach(btn => btn.style.display = 'flex');
             
             drawChart(guessHistory, finalTargetWave);
@@ -940,7 +963,7 @@ HTML_TEMPLATE = """
                 document.getElementById('history').innerHTML = '';
                 document.getElementById('keyboardContainer').style.display = 'flex';
                 
-                const actionBtns = document.querySelectorAll('.action-btn');
+                const actionBtns = document.querySelectorAll('.btn-row .action-btn');
                 actionBtns.forEach(btn => btn.style.display = 'none');
                 
                 document.getElementById('message').innerText = '';
@@ -1061,6 +1084,16 @@ HTML_TEMPLATE = """
                 if(chart) chart.update('none');
             }, 100);
         }
+
+        // Sync config modal text with saved states on load
+        const themeValEl = document.getElementById('txt-cfg-theme-val');
+        if (themeValEl) themeValEl.innerText = document.body.classList.contains('light-mode') ? 'Light' : 'Dark';
+
+        const guideValEl = document.getElementById('txt-cfg-guide-val');
+        if (guideValEl) guideValEl.innerText = showGuidelines ? 'Visible' : 'Hidden';
+
+        const kbdValEl = document.getElementById('txt-cfg-kbd-val');
+        if (kbdValEl) kbdValEl.innerText = keyboardLayout === 'qwerty' ? 'QWERTY' : 'Alphabetical';
     </script>
 </body>
 </html>
@@ -1458,6 +1491,51 @@ ABOUT_HTML = f"""
 </html>
 """
 
+CONTACT_HTML = f"""
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Contact Us - ShadoWord</title>{SHARED_CSS_JS}</head>
+<body>
+    <div class="container">
+        {HEADER_HTML}
+        <div class="content-box">
+            
+            <div class="lang-section lang-en">
+                <h1>Contact Us</h1>
+                <p>We'd love to hear from you! Whether you have a question, a bug to report, or just want to share your feedback about ShadoWord, feel free to reach out.</p>
+                <p><strong>Email:</strong> <a href="mailto:shadoword.fabric866@passmail.net">shadoword.fabric866@passmail.net</a></p>
+                <p><strong>Support the Game:</strong> If you're enjoying the game and want to support the developer, you can <a href="https://buymeacoffee.com/shadoword" target="_blank">buy me a coffee</a>.</p>
+                <footer class="humble-links">
+                    Thank you for playing ShadoWord!
+                </footer>
+            </div>
+            
+            <div class="lang-section lang-es">
+                <h1>Contacto</h1>
+                <p>¡Nos encantaría escucharte! Ya sea que tengas una pregunta, quieras reportar un error o simplemente compartir tus comentarios sobre ShadoWord, no dudes en comunicarte.</p>
+                <p><strong>Correo electrónico:</strong> <a href="mailto:shadoword.fabric866@passmail.net">shadoword.fabric866@passmail.net</a></p>
+                <p><strong>Apoya el juego:</strong> Si disfrutas del juego y quieres apoyar al desarrollador, puedes <a href="https://buymeacoffee.com/shadoword" target="_blank">invitarme a un café</a>.</p>
+                <footer class="humble-links">
+                    ¡Gracias por jugar ShadoWord!
+                </footer>
+            </div>
+
+            <div class="lang-section lang-ca">
+                <h1>Contacta'ns</h1>
+                <p>Ens encantaria escoltar-te! Tant si tens una pregunta, vols reportar un error o simplement compartir els teus comentaris sobre ShadoWord, no dubtis a comunicar-te amb nosaltres.</p>
+                <p><strong>Correu electrònic:</strong> <a href="mailto:shadoword.fabric866@passmail.net">shadoword.fabric866@passmail.net</a></p>
+                <p><strong>Dona suport al joc:</strong> Si gaudeixes del joc i vols donar suport al desenvolupador, pots <a href="https://buymeacoffee.com/shadoword" target="_blank">convidar-me a un cafè</a>.</p>
+                <footer class="humble-links">
+                    Gràcies per jugar a ShadoWord!
+                </footer>
+            </div>
+            
+        </div>
+    </div>
+</body>
+</html>
+"""
+
 # --- ROUTES ---
 
 @app.route('/')
@@ -1533,6 +1611,12 @@ def ads_txt():
     # Google's standard ads.txt line for AdSense
     ads_content = "google.com, pub-2459227402455868, DIRECT, f08c47fec0942fa0"
     return ads_content, 200, {'Content-Type': 'text/plain'}
+
+@app.route('/contact')
+def contact():
+    return render_template_string(CONTACT_HTML)
+
+# --- MAIN ---
 
 if __name__ == '__main__':
     # Use environment variables for the port (required by many cloud hosts)
