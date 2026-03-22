@@ -53,13 +53,11 @@ function calcSimilarity(targetWave, guessWave) {
 // --- Dictionary Setup (Example) ---
 
 // Replace with your actual fallback word lists
-const FALLBACK_WORDS_EN = ['APPLE', 'BRAIN', 'CRANE', 'DREAM', 'EARTH'];
+const PUZZLE_WORDS_EN = ['CYCLE', 'ROUND', 'TEMPO', 'MUSIC', 'SOUND'];
 
 const DICTIONARIES = {
-    en: loadDictionary('en', FALLBACK_WORDS_EN),
+    en: loadDictionary('en', PUZZLE_WORDS_EN),
 };
-
-const PUZZLE_WORDS_EN = ['CYCLE', 'ROUND', 'TEMPO', 'MUSIC', 'RHYME', 'SOUND'];
 
 // --- HTML Templates (Replace with actual HTML or use a template engine) ---
 
