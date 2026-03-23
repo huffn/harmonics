@@ -212,8 +212,8 @@
         // --- TRANSLATIONS ---
         const i18n = {
             en: {
-                msg_need: "Need 5 letters.", msg_next: "NEXT", msg_play_again: "START OVER",
-                msg_win: "Correct!", msg_over: "Game Over! Word was ", msg_games_won: "# OF 3",
+                msg_need: "Need 5 letters.", msg_next: "PROCEED", msg_play_again: "REINITIALIZE CALIBRATION",
+                msg_win: "Phrase Acknowledged!", msg_3_win: "Calibration Complete!", msg_over: "Game Over! Word was ", msg_games_won: "# OF 3",
                 cfg_guide: "Guide Lines", cfg_guide_vis: "Visible", cfg_guide_hid: "Hidden"
             }
         };
@@ -408,7 +408,11 @@
                     gameWon = true;
                     gamesWon++;
                     document.getElementById('games-won').innerText = i18n[currentLang].msg_games_won.replace('#', gamesWon);
-                    showMessage(i18n[currentLang].msg_win, "var(--accent)", true);
+                    if (gamesWon < 3) {
+                      showMessage(i18n[currentLang].msg_win, "var(--accent)", true);
+                    } else if (gamesWon === 3) {
+                      showMessage(i18n[currentLang].msg_3_win, "var(--accent)", true);
+                    }
                     endGame(data.target_wave);
                 } else if (attemptCount >= maxAttempts) {
                     gameWon = false;
