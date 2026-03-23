@@ -53,7 +53,7 @@ function calcSimilarity(targetWave, guessWave) {
 // --- Dictionary Setup (Example) ---
 
 // Replace with your actual fallback word lists
-const PUZZLE_WORDS_EN = ['CYCLE', 'ROUND', 'TEMPO', 'MUSIC', 'SOUND'];
+const PUZZLE_WORDS_EN = ['CYCLE', 'MUSIC', 'SOUND'];
 
 const DICTIONARIES = {
     en: loadDictionary('en', PUZZLE_WORDS_EN),
@@ -81,10 +81,12 @@ app.post('/api/guess', (req, res) => {
         return res.status(400).json({ error: "Not in word list!" });
     }
 
-    const sessionKey = `target_word_${lang}`;
+  const sessionKey = `target_word_${lang}`;
+  const sessionPosition = `position_${lang}`;
     if (!req.session[sessionKey]) {
         const words = Array.from(DICTIONARIES[lang]);
-        req.session[sessionKey] = PUZZLE_WORDS_EN[Math.floor(Math.random() * PUZZLE_WORDS_EN.length)];
+      req.session[sessionKey] = PUZZLE_WORDS_EN[0];
+      req.session[sessionPosition] = 0;
     }
 
     const currentTarget = req.session[sessionKey];
@@ -116,10 +118,17 @@ app.post('/api/guess', (req, res) => {
 
 app.post('/api/reset', (req, res) => {
     const data = req.body || {};
-    const lang = data.lang || 'en';
-    const sessionKey = `target_word_${lang}`;
+  const lang = data.lang || 'en';
+  const sessionKey = `target_word_${lang}`;
+  const sessionPosition = `position_${lang}`;
+  let position = (req.session[sessionPosition] || 0) + 1;
+  if (position >= PUZZLE_WORDS_EN.length) {
+    position = 0;
+  }
+  req.session[sessionPosition] = position;
+
     const words = Array.from(DICTIONARIES[lang]);
-    req.session[sessionKey] = PUZZLE_WORDS_EN[Math.floor(Math.random() * PUZZLE_WORDS_EN.length)];
+    req.session[sessionKey] = PUZZLE_WORDS_EN[position];
     console.log(`[${lang.toUpperCase()}] Cheat: New target word is: ${req.session[sessionKey]}`);
     res.json({ status: "reset" });
 });
