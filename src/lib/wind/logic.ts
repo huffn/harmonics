@@ -43,7 +43,7 @@ export function currentWord(id: LevelId, positions: number[]): string {
 function applyWin(s: WindState): WindState {
   if (s.level === null || s.won) return s
   if (!LEVELS[s.level].goalWords.every(w => s.found.includes(w))) return s
-  return { ...s, won: true, gamesWon: [...s.gamesWon, s.level] }
+  return { ...s, won: true, gamesWon: s.gamesWon.includes(s.level) ? s.gamesWon : [...s.gamesWon, s.level] }
 }
 
 export function shiftColumn(s: WindState, col: number, to: number): WindState {
@@ -86,10 +86,20 @@ const isLevelId = (v: unknown): v is LevelId => typeof v === 'string' && (LEVEL_
 export function isWindState(v: unknown): v is WindState {
   if (typeof v !== 'object' || v === null) return false
   const o = v as Record<string, unknown>
+  if (!Array.isArray(o.gamesWon) || !o.gamesWon.every(isLevelId)) return false
+  if (typeof o.won !== 'boolean') return false
+  if (!Array.isArray(o.positions) || !o.positions.every(n => Number.isInteger(n))) return false
+  if (!isStrArr(o.found) || !isStrArr(o.extraFound)) return false
+  if (o.level === null) {
+    return o.positions.length === 0 && o.found.length === 0 && o.extraFound.length === 0 && o.won === false
+  }
+  if (!isLevelId(o.level)) return false
+  const lv = LEVELS[o.level]
+  const positions = o.positions as number[]
   return (
-    Array.isArray(o.gamesWon) && o.gamesWon.every(isLevelId) &&
-    (o.level === null || isLevelId(o.level)) &&
-    Array.isArray(o.positions) && o.positions.every(n => Number.isInteger(n)) &&
-    isStrArr(o.found) && isStrArr(o.extraFound) && typeof o.won === 'boolean'
+    positions.length === lv.columns.length &&
+    o.found.length === lv.goalWords.length &&
+    o.extraFound.length === lv.potentialWords.length &&
+    positions.every((n, i) => n >= 0 && n < lv.columns[i].letters.length)
   )
 }
