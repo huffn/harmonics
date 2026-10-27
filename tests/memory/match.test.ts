@@ -15,6 +15,9 @@ test('three riddles ship', () => expect(RIDDLES).toHaveLength(3))
 test('the table answers solve each riddle in order', () => {
 	expect(['Perception', 'Vision', 'Memory'].map((a, i) => isAcceptable(a, RIDDLES[i].answers))).toEqual([true, true, true])
 })
+test('synonyms are accepted', () => {
+	expect(['Perspective', 'a premonition', 'Remembrance'].map((a, i) => isAcceptable(a, RIDDLES[i].answers))).toEqual([true, true, true])
+})
 test('an earlier answer does not solve a later riddle', () => expect(isAcceptable('perception', RIDDLES[2].answers)).toBe(false))
 
 test('normalizeAnswer drops one leading article and collapses space', () => {
