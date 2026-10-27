@@ -215,7 +215,7 @@ export function mountTable(root: HTMLElement): { destroy(): void; fullReset(): v
       fullReset();
       return;
     }
-    if (!confirm('Clear every mirror, harmonic and the prism from the table?')) return;
+    if (!confirm('Clear the table?')) return;
     S.resetBoard(s);
     update();
   }
