@@ -21,3 +21,6 @@ Thumbs.db
 # Vite
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
+
+# Light puzzle full-colour source map (large; input to build:light-assets)
+/tools/light/source/

@@ -2,16 +2,15 @@
 //   assets/map-grey.jpg       the greyscale display map
 //   assets/mask-<name>.png    each country's shape (greyscale alpha); the page
 //                             colors its glow through this mask
-// Usage: node tools/light/build-assets.mjs [path/to/source-map.png]
+// Usage: node tools/light/build-assets.mjs [path/to/source-map.png]  (default: tools/light/source/fabula-map.png, git-ignored)
 import fs from 'node:fs';
 import path from 'node:path';
 import sharp from 'sharp';
 
 import { classify, fillHoles, smoothEdge, keepComponents, patchFromAbove } from './masks.ts';
 
-const DEFAULT_SOURCE = '/Users/huffn/Downloads/Fabula 2026-03-31-23-37.png';
+const DEFAULT_SOURCE = path.resolve(import.meta.dirname, 'source', 'fabula-map.png');
 const ASSETS = path.resolve(import.meta.dirname, '..', '..', 'static', 'light', 'assets');
-const SOURCE_COPY = path.join(ASSETS, 'source', 'fabula-map.png');
 const WIDTH = 4000;
 const TOL = 28;
 const EDGE_RADIUS = 6;
@@ -54,10 +53,12 @@ function sampleColor(rgba, w, x, y) {
 
 async function main() {
   const source = process.argv[2] || DEFAULT_SOURCE;
-  fs.mkdirSync(path.dirname(SOURCE_COPY), { recursive: true });
-  if (path.resolve(source) !== SOURCE_COPY) fs.copyFileSync(source, SOURCE_COPY);
+  if (!fs.existsSync(source)) {
+    console.error(`Source map not found: ${source}\nPut it at tools/light/source/fabula-map.png or pass a path.`);
+    process.exit(1);
+  }
 
-  const resized = sharp(SOURCE_COPY, { limitInputPixels: false }).resize({ width: WIDTH });
+  const resized = sharp(source, { limitInputPixels: false }).resize({ width: WIDTH });
   const { data, info } = await resized.clone().ensureAlpha().raw().toBuffer({ resolveWithObject: true });
   const { width: w, height: h } = info;
   console.log(`working size ${w}×${h}`);
