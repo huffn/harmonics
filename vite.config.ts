@@ -11,9 +11,7 @@ export default defineConfig({
 					filename.split(/[/\\]/).includes('node_modules') ? undefined : true
 			},
 			// Static site: default pages/assets output to `build`.
-			adapter: adapter(),
-			// Kit 3 removed $lib; keep it so tasks/tests can use the conventional alias.
-			alias: { $lib: 'src/lib' }
+			adapter: adapter()
 		})
 	],
 	test: { include: ['tests/**/*.test.ts'], environment: 'jsdom' }

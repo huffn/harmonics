@@ -1,5 +1,5 @@
 import { expect, test } from 'vitest'
-import { gmActionFor } from '$lib/shared/gm-keys'
+import { gmActionFor } from '#lib/shared/gm-keys'
 const k = (code: string, mods: Partial<KeyboardEvent> = {}) =>
   ({ code, altKey: false, shiftKey: false, ctrlKey: false, metaKey: false, ...mods })
 test('Alt+Shift+N advances', () => expect(gmActionFor(k('KeyN', { altKey: true, shiftKey: true }))).toBe('advance'))

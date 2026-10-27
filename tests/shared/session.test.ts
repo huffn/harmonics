@@ -1,5 +1,5 @@
 import { beforeEach, expect, test } from 'vitest'
-import { loadSession, saveSession, clearSession } from '$lib/shared/session'
+import { loadSession, saveSession, clearSession } from '#lib/shared/session'
 const isNum = (v: unknown): v is { n: number } => typeof (v as any)?.n === 'number'
 beforeEach(() => sessionStorage.clear())
 test('round-trips a value', () => {

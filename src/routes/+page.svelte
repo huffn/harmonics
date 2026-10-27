@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { SITE_TITLE, SITE_FLAVOR } from '$lib/site'
+	import { SITE_TITLE, SITE_FLAVOR } from '#lib/site'
 </script>
 
 <svelte:head>
