@@ -52,7 +52,7 @@
 				if (hidden.includes(index)) return
 				const isLast = index === history.length - 1
 				datasets.push({
-					data: h.wave,
+					data: [...h.wave],
 					// '33' is hex for 20% opacity on older lines.
 					borderColor: isLast ? guessColor : guessColor + '33',
 					borderWidth: isLast ? 4 : 2,
@@ -62,7 +62,7 @@
 		}
 		if (target) {
 			datasets.push({
-				data: target, borderColor: targetColor, borderWidth: 5,
+				data: [...target], borderColor: targetColor, borderWidth: 5,
 				pointRadius: 0, pointHoverRadius: 0, pointBackgroundColor: targetColor, tension: 0.4
 			})
 		}
@@ -96,6 +96,8 @@
 		return c
 	}
 
+	// Chart.js patches the data arrays it is given (to watch push/splice), which
+	// Svelte's $state proxies reject, so every dataset gets a plain copy.
 	function miniChart(r: GuessResult): Chart {
 		const borderColor = cssVar('--text-muted')
 		const guessColor = cssVar('--accent-guess')
@@ -104,9 +106,9 @@
 			data: {
 				labels,
 				datasets: [
-					{ data: r.upper, borderColor, borderDash: [2, 2], borderWidth: 1, fill: false, pointRadius: 0, tension: 0.4 },
-					{ data: r.lower, borderColor, borderDash: [2, 2], borderWidth: 1, fill: false, pointRadius: 0, tension: 0.4 },
-					{ data: r.wave, borderColor: guessColor, borderWidth: 1.5, pointRadius: 0, tension: 0.4 }
+					{ data: [...r.upper], borderColor, borderDash: [2, 2], borderWidth: 1, fill: false, pointRadius: 0, tension: 0.4 },
+					{ data: [...r.lower], borderColor, borderDash: [2, 2], borderWidth: 1, fill: false, pointRadius: 0, tension: 0.4 },
+					{ data: [...r.wave], borderColor: guessColor, borderWidth: 1.5, pointRadius: 0, tension: 0.4 }
 				]
 			},
 			options: {
