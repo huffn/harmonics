@@ -1,0 +1,280 @@
+/* Ported from Harmonics/html_template.html. Everything is scoped under html.rhythm
+   (set by the route in onMount) so it cannot leak into other routes. */
+html.rhythm {
+	--bg-color: #111520;
+	--text-color: #f8fafc;
+	--text-muted: #94a3b8;
+	--box-bg: #1e2536;
+	--border-color: #334155;
+	--accent: #8ab4f8;
+	--accent-guess: #ff5a00;
+	--shadow-fill: rgba(148, 163, 184, 0.15);
+}
+
+html.rhythm body {
+	font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+	text-align: center;
+	background: var(--bg-color);
+	color: var(--text-color);
+	margin: 0;
+	padding: 20px 20px 0 20px;
+	display: flex;
+	justify-content: center;
+	transition:
+		background 0.3s,
+		color 0.3s;
+	min-height: 100vh;
+	overflow-x: hidden;
+	overflow-y: auto;
+}
+html.rhythm .container {
+	width: 100%;
+	max-width: 550px;
+	display: flex;
+	flex-direction: column;
+	position: relative;
+}
+
+/* HEADER */
+html.rhythm .container header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: 10px;
+	flex-shrink: 0;
+}
+html.rhythm .container h1 {
+	margin: 0;
+	font-size: 18px;
+	letter-spacing: 3px;
+	font-weight: bold;
+}
+
+/* CHART SCROLL BOX */
+html.rhythm .chart-scroll-box {
+	position: relative;
+	height: 280px;
+	min-height: 280px;
+	width: 100%;
+	overflow-y: hidden;
+	overflow-x: hidden;
+	margin-bottom: 15px;
+	border: 1px solid var(--bg-color);
+	border-radius: 8px;
+	background: var(--bg-color);
+	flex-shrink: 0;
+	scroll-behavior: smooth;
+}
+html.rhythm .chart-container {
+	position: relative;
+	height: 500px;
+	width: 100%;
+}
+
+html.rhythm .dots {
+	display: flex;
+	justify-content: center;
+	gap: 8px;
+	margin-bottom: 15px;
+	flex-shrink: 0;
+}
+html.rhythm .dot {
+	width: 8px;
+	height: 8px;
+	border-radius: 50%;
+	background: var(--border-color);
+}
+html.rhythm .dot.active {
+	background: var(--accent-guess);
+}
+html.rhythm .dot.used {
+	background: var(--box-bg);
+}
+
+html.rhythm .input-row {
+	display: flex;
+	justify-content: center;
+	gap: 8px;
+	margin-bottom: 15px;
+	flex-shrink: 0;
+}
+html.rhythm .letter-box {
+	width: 45px;
+	height: 55px;
+	font-size: 28px;
+	font-weight: bold;
+	text-align: center;
+	text-transform: uppercase;
+	background: transparent;
+	color: var(--text-color);
+	border: 2px solid var(--border-color);
+	border-radius: 6px;
+	outline: none;
+	transition: border-color 0.2s;
+}
+html.rhythm .letter-box:focus {
+	border-color: var(--accent);
+}
+
+html.rhythm .message {
+	font-size: 16px;
+	font-weight: bold;
+	margin-bottom: 5px;
+	height: 24px;
+	flex-shrink: 0;
+}
+
+html.rhythm .btn-row {
+	display: flex;
+	gap: 10px;
+	margin-bottom: 10px;
+	flex-shrink: 0;
+}
+html.rhythm .action-btn {
+	background: var(--accent);
+	color: #fff;
+	font-weight: bold;
+	font-size: 16px;
+	border: none;
+	padding: 12px 24px;
+	border-radius: 6px;
+	cursor: pointer;
+	width: 100%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	gap: 8px;
+}
+
+html.rhythm .history {
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+	flex-grow: 1;
+	overflow-y: auto;
+	margin-bottom: 15px;
+	padding-right: 5px;
+	max-height: 160px;
+}
+html.rhythm .chart-scroll-box::-webkit-scrollbar,
+html.rhythm .history::-webkit-scrollbar {
+	width: 6px;
+}
+html.rhythm .chart-scroll-box::-webkit-scrollbar-track,
+html.rhythm .history::-webkit-scrollbar-track {
+	background: transparent;
+}
+html.rhythm .chart-scroll-box::-webkit-scrollbar-thumb,
+html.rhythm .history::-webkit-scrollbar-thumb {
+	background: var(--border-color);
+	border-radius: 4px;
+}
+
+html.rhythm .guess-row {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	background: var(--box-bg);
+	border: 1px solid var(--border-color);
+	padding: 10px 15px;
+	border-radius: 8px;
+	font-size: 14px;
+	font-weight: bold;
+	letter-spacing: 2px;
+	flex-shrink: 0;
+}
+html.rhythm .guess-row .num {
+	color: var(--text-muted);
+	width: 20px;
+	text-align: left;
+}
+html.rhythm .guess-row .word {
+	flex-grow: 1;
+	text-align: left;
+	margin-left: 10px;
+	color: var(--text-color);
+}
+html.rhythm .mini-chart-container {
+	width: 70px;
+	height: 25px;
+	margin-right: 15px;
+	transition: opacity 0.2s;
+	cursor: pointer;
+	background: transparent;
+	border: none;
+	padding: 0;
+	display: block;
+}
+html.rhythm .mini-chart-container.hidden {
+	opacity: 0.3;
+}
+html.rhythm .guess-row .pct {
+	background: var(--border-color);
+	color: var(--accent);
+	padding: 4px 10px;
+	border-radius: 12px;
+	font-size: 12px;
+}
+
+/* KEYBOARD (STICKY AT BOTTOM) */
+html.rhythm .keyboard {
+	display: flex;
+	flex-direction: column;
+	gap: 7px;
+	flex-shrink: 0;
+	position: sticky;
+	bottom: 0;
+	background: var(--bg-color);
+	padding: 15px 0 calc(30px + env(safe-area-inset-bottom)) 0;
+	z-index: 100;
+	border-top: 1px solid var(--border-color);
+}
+html.rhythm .key-row {
+	display: flex;
+	justify-content: center;
+	gap: 6px;
+}
+html.rhythm .key {
+	background: var(--box-bg);
+	border: 1px solid var(--border-color);
+	color: var(--text-color);
+	font-size: 16px;
+	font-weight: bold;
+	border-radius: 4px;
+	cursor: pointer;
+	height: 48px;
+	min-width: 32px;
+	flex: 1;
+	max-width: 45px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	transition: background 0.1s;
+}
+html.rhythm .key:active {
+	background: var(--border-color);
+}
+html.rhythm .key.wide {
+	min-width: 55px;
+	max-width: 65px;
+	font-size: 12px;
+}
+
+@media (max-width: 450px) {
+	html.rhythm .container h1 {
+		font-size: 14px;
+		letter-spacing: 1px;
+	}
+	html.rhythm .key {
+		font-size: 14px;
+		height: 44px;
+	}
+	html.rhythm .key.wide {
+		font-size: 10px;
+	}
+	html.rhythm .letter-box {
+		width: 40px;
+		height: 50px;
+		font-size: 24px;
+	}
+}

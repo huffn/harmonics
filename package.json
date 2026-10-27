@@ -30,5 +30,8 @@
 		"#lib": "./src/lib/index.js",
 		"#lib/*.svelte": "./src/lib/*.svelte",
 		"#lib/*": "./src/lib/*.ts"
+	},
+	"dependencies": {
+		"chart.js": "^4.6.1"
 	}
 }
