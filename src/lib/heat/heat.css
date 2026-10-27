@@ -1,0 +1,131 @@
+/* Page-level styles for /heat (from hot-cold/src/app.css, the Board's :root tile sizes and
+   the toast theme), scoped to html.heat which the route adds while mounted.
+   :where() keeps element rules at their original low specificity so component styles win. */
+
+@font-face {
+	font-family: 'OpenDyslexic-Regular';
+	src: url('/heat/font/OpenDyslexic-Regular.woff') format('woff');
+}
+
+html.heat {
+	--font-list: Arial, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu,
+		Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+	font-family: var(--font-list);
+	--primary-color: #161a25;
+	--secondary-color: #221c2e;
+	--tertiary-color: #312236;
+	--accent-color: #de49a2;
+	--cta-color: #096fb7;
+	--correct-color: #15a850;
+	--error-color: #ac2847;
+	--before-color: #e38f2f;
+	--after-color: #567de8;
+	--heading-color: rgba(255, 255, 255, 0.8);
+	--text-color: #cccccc;
+	color-scheme: dark only;
+
+	/* Default "tile sharpness" (0.72) from the original options. */
+	--tile-arrow-radius: 39.92%;
+
+	/* Board sizing (was :root in Board.svelte). Six letters per row. */
+	--tile-margin: 5px;
+	--tile-size: 70px;
+	--tile-font-size: 2.5rem;
+	--board-width: calc(6 * var(--tile-size) + 5 * var(--tile-margin));
+
+	/* Toast theme (was the svelte-toast variables). */
+	--toast-left: calc(50vw - 8rem);
+	--toast-top: 2rem;
+	--toast-right: auto;
+	--toast-background: var(--tertiary-color);
+	--toast-padding: 0.75rem 2rem;
+	--toast-radius: 1rem;
+}
+
+@media (max-width: 720px) {
+	html.heat {
+		--tile-size: 64px;
+		--tile-margin: 4px;
+	}
+}
+@media (max-width: 640px) {
+	html.heat {
+		--tile-size: 58px;
+		--tile-font-size: 2rem;
+	}
+}
+@media (max-width: 560px) {
+	html.heat {
+		--tile-size: 54px;
+	}
+}
+@media (max-width: 480px) {
+	html.heat {
+		--tile-size: 50px;
+		--tile-margin: 3px;
+	}
+}
+@media (max-width: 430px) {
+	html.heat {
+		--tile-size: 48px;
+	}
+}
+@media (max-width: 390px) {
+	html.heat {
+		--tile-size: 44px;
+		--tile-font-size: 1.9rem;
+	}
+}
+@media (max-width: 375px) {
+	html.heat {
+		--tile-size: 42px;
+		--tile-margin: 2px;
+		--tile-font-size: 1.8rem;
+	}
+}
+
+:where(html.heat) body {
+	margin: 0;
+	padding: 0;
+	color: var(--text-color);
+	background: var(--tertiary-color);
+	transition: background-color 150ms ease-out;
+}
+
+:where(html.heat) :is(h1, h2, h3, p) {
+	font-weight: 400;
+	color: var(--heading-color);
+}
+
+:where(html.heat) p {
+	line-height: 1.5;
+}
+
+:where(html.heat) a {
+	color: var(--accent-color);
+	text-decoration: none;
+	font-weight: bold;
+}
+
+:where(html.heat) a:hover {
+	text-decoration: underline;
+}
+
+:where(html.heat) h1 {
+	font-size: 1.625rem;
+}
+
+:where(html.heat) :is(input, button) {
+	cursor: pointer;
+	font-size: inherit;
+	font-family: inherit;
+}
+
+:where(html.heat) button {
+	color: var(--text-color);
+	background: var(--primary-color);
+}
+
+:where(html.heat) button:focus:not(:focus-visible) {
+	outline: none;
+}

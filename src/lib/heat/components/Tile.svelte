@@ -1,0 +1,387 @@
+<script lang="ts">
+	import { untrack } from 'svelte';
+	import { quadOut } from 'svelte/easing';
+	import type { TransitionConfig } from 'svelte/transition';
+	import type { Tile } from '#lib/heat/logic';
+
+	let {
+		tile,
+		current = false,
+		showHint = false,
+		inCurrentRow = false,
+		finished = false,
+		invalidWord = false,
+		invalidWordPreview = false,
+		notEnoughLetters = false,
+		onselect
+	}: {
+		tile: Tile;
+		current?: boolean;
+		showHint?: boolean;
+		inCurrentRow?: boolean;
+		finished?: boolean;
+		invalidWord?: boolean;
+		invalidWordPreview?: boolean;
+		notEnoughLetters?: boolean;
+		onselect?: (id: number) => void;
+	} = $props();
+
+	// Only tiles that get scored while on screen play the flip; tiles that arrive already
+	// scored (reload, tutorial) don't.
+	const animate = untrack(() => !tile.scored);
+
+	const tileFlipDelay = $derived(tile.id * 150);
+	const tileFlipDuration = 500;
+
+	// Tick-based transitions, as in the original (hot-cold/src/lib/transitions.ts).
+	function fly(node: HTMLElement, opts: { duration: number; easing: (t: number) => number }): TransitionConfig {
+		return {
+			...opts,
+			tick: (t, u) => {
+				node.style.setProperty('transform', `translateY(${u * 100.0}%)`);
+				node.style.setProperty('opacity', `${t}`);
+			}
+		};
+	}
+	function fade(node: HTMLElement, opts: { delay: number; duration: number }): TransitionConfig {
+		return { ...opts, tick: (t) => node.style.setProperty('opacity', `${t}`) };
+	}
+	const typeAnimation = { duration: 100, easing: quadOut };
+
+	const displayHint = $derived(tile.letterBounds && !tile.letter && showHint);
+</script>
+
+<!-- svelte-ignore a11y_click_events_have_key_events, a11y_interactive_supports_focus -->
+<div
+	role="button"
+	class="tile-container"
+	class:correct={tile.scored && tile.distance === 0}
+	class:before={tile.distance < 0}
+	class:after={tile.distance > 0}
+	class:animate
+	class:shimmy={invalidWord && inCurrentRow}
+	class:shake={inCurrentRow && notEnoughLetters && !tile.letter}
+	style={`animation-delay: ${tile.id * (notEnoughLetters ? 20 : 0)}ms; --tile-animation-delay: ${tileFlipDelay}ms; --tile-animation-duration: ${tileFlipDuration}ms;`}
+	onclick={() => inCurrentRow && onselect?.(tile.id)}
+>
+	{#if tile.scored}
+		<div class="tile-clip">
+			<div class="tile-background"></div>
+			<div class="tile scored filled">{tile.letter}</div>
+		</div>
+	{:else}
+		<div
+			class="tile"
+			class:filled={tile.letter !== ''}
+			class:current
+			class:before-pre={!tile.scored && tile.polarity < 0}
+			class:after-pre={!tile.scored && tile.polarity > 0}
+			class:finished
+			class:clickable={inCurrentRow}
+			class:invalid={invalidWordPreview && inCurrentRow}
+			out:fade={{ delay: tileFlipDelay + tileFlipDuration * 0.6, duration: 0 }}
+		>
+			{#if tile.letter}<div in:fly|global={typeAnimation}>{tile.letter}</div>{/if}
+			{#if tile.letterBounds && displayHint}
+				<span class="hint"
+					>{tile.letterBounds[0]}
+					{#if tile.letterBounds[0] !== tile.letterBounds[1]}
+						<span class="small">...</span>{tile.letterBounds[1]}
+					{/if}
+				</span>
+			{/if}
+		</div>
+	{/if}
+</div>
+
+<style>
+	.tile-container {
+		position: relative;
+		width: var(--tile-size);
+		height: var(--tile-size);
+		margin: 0 calc(var(--tile-margin) / 2);
+	}
+
+	.tile-container.correct {
+		overflow: visible;
+	}
+
+	.tile-clip {
+		overflow: hidden;
+		position: absolute;
+		width: 100%;
+		height: 100%;
+		border-radius: 14%;
+	}
+
+	.tile-container.animate.correct::after {
+		content: '';
+		display: block;
+		opacity: 0;
+		width: 100%;
+		height: 100%;
+		border-radius: 14%;
+		animation: glow calc(var(--tile-animation-duration) * 1.6) var(--tile-animation-delay)
+			ease-in backwards;
+		box-shadow: 0 0 10px var(--correct-color);
+	}
+
+	.tile-background {
+		width: 100%;
+		height: 100%;
+		border-radius: 14%;
+		position: absolute;
+		top: 0;
+		left: 0;
+	}
+
+	.correct .tile-background {
+		background: var(--correct-color);
+	}
+
+	.correct.animate .tile-background {
+		animation: illuminate var(--tile-animation-duration) var(--tile-animation-delay)
+			ease-in backwards;
+	}
+
+	.before .tile-clip {
+		border-top-left-radius: var(--tile-arrow-radius);
+		border-top-right-radius: var(--tile-arrow-radius);
+	}
+
+	.before.animate .tile-clip {
+		animation: bloop-up var(--tile-animation-duration) var(--tile-animation-delay) both;
+	}
+
+	.before .tile-background {
+		background: var(--before-color);
+	}
+
+	.before.animate .tile-background {
+		animation:
+			fly-up var(--tile-animation-duration) var(--tile-animation-delay) backwards,
+			bloop-up var(--tile-animation-duration) var(--tile-animation-delay) backwards;
+	}
+
+	.after .tile-clip {
+		border-bottom-left-radius: var(--tile-arrow-radius);
+		border-bottom-right-radius: var(--tile-arrow-radius);
+	}
+
+	.after.animate .tile-clip {
+		animation: bloop-down var(--tile-animation-duration) var(--tile-animation-delay) both;
+	}
+
+	.after .tile-background {
+		background: var(--after-color);
+	}
+
+	.after.animate .tile-background {
+		animation:
+			fly-down var(--tile-animation-duration) var(--tile-animation-delay) backwards,
+			bloop-down var(--tile-animation-duration) var(--tile-animation-delay) backwards;
+	}
+
+	@keyframes bloop-up {
+		0% {
+			animation-timing-function: ease-in;
+		}
+		40% {
+			border-top-left-radius: 50%;
+			border-top-right-radius: 50%;
+			animation-timing-function: ease-out;
+		}
+		60% {
+			border-top-left-radius: 14%;
+			border-top-right-radius: 14%;
+			animation-timing-function: ease-in;
+		}
+		100% {
+			border-top-left-radius: var(--tile-arrow-radius);
+			border-top-right-radius: var(--tile-arrow-radius);
+		}
+	}
+
+	@keyframes bloop-down {
+		0% {
+			animation-timing-function: ease-in;
+		}
+		40% {
+			border-bottom-left-radius: 50%;
+			border-bottom-right-radius: 50%;
+			animation-timing-function: ease-out;
+		}
+		60% {
+			border-bottom-left-radius: 14%;
+			border-bottom-right-radius: 14%;
+			animation-timing-function: ease-in;
+		}
+		100% {
+			border-bottom-left-radius: var(--tile-arrow-radius);
+			border-bottom-right-radius: var(--tile-arrow-radius);
+		}
+	}
+
+	@keyframes fly-up {
+		0% {
+			transform: translateY(102%);
+			animation-timing-function: ease-in;
+		}
+		40% {
+			transform: translateY(0);
+		}
+	}
+
+	@keyframes fly-down {
+		0% {
+			transform: translateY(-102%);
+			animation-timing-function: ease-in;
+		}
+		40% {
+			transform: translateY(0);
+		}
+	}
+
+	@keyframes illuminate {
+		0% {
+			background-color: transparent;
+		}
+		60% {
+			background-color: var(--correct-color);
+		}
+	}
+
+	@keyframes glow {
+		10% {
+			opacity: 0;
+		}
+		50% {
+			opacity: 1;
+		}
+		100% {
+			opacity: 0;
+		}
+	}
+
+	.tile {
+		line-height: var(--tile-font-size);
+		font-size: var(--tile-font-size);
+		font-weight: 700;
+		display: inline-flex;
+		justify-content: center;
+		align-items: center;
+		text-transform: uppercase;
+		box-sizing: border-box;
+		border: 2px solid #5b505e;
+		position: absolute;
+		border-radius: 14%;
+		width: 100%;
+		height: 100%;
+		color: #fff;
+		transition: border-color 70ms ease-out;
+		text-shadow: 1px 1px 1px #0003;
+		user-select: none;
+	}
+	.tile.finished {
+		border-color: #433a46;
+	}
+	.tile.filled {
+		border-color: #988a9d;
+	}
+	.tile.scored {
+		border: 0;
+	}
+	.tile.clickable {
+		cursor: pointer;
+	}
+
+	.tile.before-pre:not(.finished) {
+		color: var(--before-color);
+		border-color: var(--before-color);
+	}
+
+	.tile.after-pre:not(.finished) {
+		color: var(--after-color);
+		border-color: var(--after-color);
+	}
+
+	.tile.current:not(.finished) {
+		border-color: #ddd;
+		border-width: 3px;
+	}
+
+	.tile-container .tile.invalid {
+		color: #d81946;
+	}
+
+	.hint {
+		font-size: 0.5em;
+		font-weight: 400;
+		color: #bbb;
+		padding-top: 12px;
+		text-shadow: none;
+		display: flex;
+		align-items: baseline;
+		gap: 5px;
+	}
+
+	.small {
+		line-height: 1em;
+		font-size: 0.7em;
+	}
+
+	.shimmy {
+		animation: shimmy ease-out;
+		animation-duration: 300ms;
+	}
+
+	.shake {
+		animation: shake ease-out;
+		animation-duration: 300ms;
+	}
+
+	@keyframes shimmy {
+		0%,
+		100% {
+			transform: translate(0, 0);
+		}
+		25% {
+			transform: translate(0.4rem, 0);
+		}
+		50% {
+			transform: translate(-0.3rem, 0);
+		}
+		75% {
+			transform: translate(0.2rem, 0);
+		}
+	}
+
+	@keyframes shake {
+		0%,
+		100% {
+			transform: translate(0, 0);
+		}
+		25% {
+			transform: translate(0, -0.4rem);
+		}
+		50% {
+			transform: translate(0, 0.3rem);
+		}
+		75% {
+			transform: translate(0, -0.2rem);
+		}
+	}
+
+	@media (max-width: 480px) {
+		.hint {
+			font-size: 0.48em;
+			gap: 4px;
+		}
+	}
+	@media (max-width: 375px) {
+		.hint {
+			font-size: 0.45em;
+			gap: 3px;
+		}
+	}
+</style>
