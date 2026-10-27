@@ -24,13 +24,19 @@ npm run build
 
 Output goes to `build/`.
 
+## Before game night
+
+1. In `src/lib/memory/riddles.ts`, replace the `TODO(GM)` placeholders: the three prompts and their accepted answers.
+2. Edit the landing page text in `src/lib/site.ts`.
+3. Rebuild (`npm run build`) and redeploy.
+
 ## GM keys
 
 Hidden; there is no on-screen hint.
 
 | Keys | What it does |
 |---|---|
-| `Alt+Shift+N` | Advance the current puzzle (no-op on Light, which has a single level) |
+| `Alt+Shift+N` | Advance the current puzzle. Does nothing on Light (always); on Rhythm and Heat once a round has ended (use the on-screen button); on Wind at the level menu or after a level is won |
 | `Alt+Shift+R` | Reset the current puzzle (on Light: full restart, back to the covered bowl, harmonics hidden) |
 | `Alt+Shift+S` | Light: show or hide the solution (faint dashed mirrors, plus a faint dot of the intended color in each temple) |
 | Type `harmonic` | Light: reveal the Harmonics and Awakened panels |
@@ -60,6 +66,8 @@ Synology Web Station, QNAP and similar are often Apache-based. Put this `.htacce
 
 ```
 RewriteEngine On
+# /heat and /light are also real asset directories; stop Apache redirecting them to /heat/
+DirectorySlash Off
 # /heat/ -> /heat
 RewriteRule ^(.+)/$ /$1 [R=308,L]
 # /heat -> heat.html when it exists

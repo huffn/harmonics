@@ -1,10 +1,11 @@
 // Forgiving answer matching for the memory riddles.
+import { RIDDLES } from './riddles'
 
-export type MemoryState = { index: number } // 0-3; 3 = solved
+export type MemoryState = { index: number } // 0..RIDDLES.length; RIDDLES.length = solved
 
 export function isMemoryState(v: unknown): v is MemoryState {
 	const i = (v as { index?: unknown } | null)?.index
-	return typeof i === 'number' && Number.isInteger(i) && i >= 0 && i <= 3
+	return typeof i === 'number' && Number.isInteger(i) && i >= 0 && i <= RIDDLES.length
 }
 
 /** Lowercase, strip accents and punctuation, collapse whitespace, drop one leading article. */

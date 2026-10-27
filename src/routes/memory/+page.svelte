@@ -160,7 +160,7 @@
 	}
 	button {
 		background: var(--accent);
-		color: #fff;
+		color: var(--bg-color);
 		font-weight: bold;
 		font-size: 16px;
 		border: none;

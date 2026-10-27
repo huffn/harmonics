@@ -74,3 +74,12 @@ test('isWindState rejects state inconsistent with its level', () => {
   expect(isWindState({ ...initialWindState(), won: true })).toBe(false)
   expect(isWindState({ ...initialWindState(), found: ['-'] })).toBe(false)
 })
+
+test('isWindState accepts states the logic produces', () => {
+  const started = startLevel(initialWindState(), 'EASY')
+  const mid = shiftColumn(started, 0, LEVELS.EASY.columns[0].letters.length - 1)
+  const won = forceWin(started)
+  expect(won.won).toBe(true)
+  const continued = continueAfterWin(won)
+  for (const s of [initialWindState(), started, mid, won, continued]) expect(isWindState(s)).toBe(true)
+})

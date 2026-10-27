@@ -3,6 +3,8 @@
 server {
     listen 8080;
     server_name _;
+    # Keep redirects relative so they survive Docker/port mapping.
+    absolute_redirect off;
     root /srv/puzzles;
     index index.html;
     gzip on;

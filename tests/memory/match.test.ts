@@ -27,8 +27,9 @@ test('allowedTypos thresholds', () => {
 })
 test('isMemoryState', () => {
 	expect(isMemoryState({ index: 0 })).toBe(true)
-	expect(isMemoryState({ index: 3 })).toBe(true)
-	expect(isMemoryState({ index: 4 })).toBe(false)
+	expect(isMemoryState({ index: RIDDLES.length })).toBe(true)
+	expect(isMemoryState({ index: RIDDLES.length + 1 })).toBe(false)
+	expect(isMemoryState({ index: -1 })).toBe(false)
 	expect(isMemoryState({ index: 1.5 })).toBe(false)
 	expect(isMemoryState(null)).toBe(false)
 })
