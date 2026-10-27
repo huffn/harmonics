@@ -1,0 +1,14 @@
+# Serve the built site (output of `npm run build`) as plain static files.
+# Change the root to wherever you copied build/ on the NAS.
+:8080 {
+	root * /srv/puzzles
+	encode gzip
+
+	# /heat/ -> /heat (then heat.html)
+	@trailing path_regexp trailing ^/(.+)/$
+	redir @trailing /{re.trailing.1} 308
+
+	# /heat -> heat.html
+	try_files {path} {path}.html {path}/
+	file_server
+}

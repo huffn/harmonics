@@ -37,4 +37,15 @@ Hidden; there is no on-screen hint.
 
 ## Deploy
 
-TBD.
+```
+npm run build
+```
+
+Copy the contents of `build/` to the NAS web root. The site is plain static files; nothing runs on the server and nothing is fetched from third parties.
+
+Each puzzle is emitted as `light.html`, `heat.html`, etc. (not `heat/index.html`), so the web server must try `.html` for extensionless URLs. Any NAS web server that can do "try the path, then the path plus `.html`" works. Examples serving `build/` as the site root, with `/heat` and `/heat/` both reaching `heat.html`:
+
+- `deploy/nginx.conf.example` (`try_files $uri $uri.html $uri/ =404;`)
+- `deploy/Caddyfile.example` (`try_files {path} {path}.html {path}/` with `file_server`)
+
+A trailing slash is redirected to the slash-less URL first, because `/heat/` would otherwise be looked up as an (index-less) directory. `npm run preview` is handy for a local check but is not identical to nginx or Caddy.

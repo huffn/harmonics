@@ -1,0 +1,22 @@
+# Serve the built site (output of `npm run build`) as plain static files.
+# Change root to wherever you copied build/ on the NAS.
+server {
+    listen 8080;
+    server_name _;
+    root /srv/puzzles;
+    index index.html;
+
+    # /heat/ -> /heat (then heat.html)
+    rewrite ^/(.+)/$ /$1 permanent;
+
+    # /heat -> heat.html
+    location / {
+        try_files $uri $uri.html $uri/ =404;
+    }
+
+    # Hashed build output never changes.
+    location /_app/immutable/ {
+        add_header Cache-Control "public, max-age=31536000, immutable";
+        try_files $uri =404;
+    }
+}
