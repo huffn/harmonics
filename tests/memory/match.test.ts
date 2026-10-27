@@ -12,7 +12,10 @@ test('two typos in a medium word fail', () => expect(isAcceptable('shdw', ['shad
 test('empty input never matches', () => expect(isAcceptable('   ', ['a'])).toBe(false))
 test('any listed answer counts', () => expect(isAcceptable('echo', ['silence', 'echo'])).toBe(true))
 test('three riddles ship', () => expect(RIDDLES).toHaveLength(3))
-test('placeholders are marked', () => RIDDLES.forEach((r) => expect(r.prompt).toMatch(/^TODO\(GM\):/)))
+test('the table answers solve each riddle in order', () => {
+	expect(['Perception', 'Vision', 'Memory'].map((a, i) => isAcceptable(a, RIDDLES[i].answers))).toEqual([true, true, true])
+})
+test('an earlier answer does not solve a later riddle', () => expect(isAcceptable('perception', RIDDLES[2].answers)).toBe(false))
 
 test('normalizeAnswer drops one leading article and collapses space', () => {
 	expect(normalizeAnswer('An   Old\tFriend')).toBe('old friend')

@@ -138,6 +138,7 @@
 		font-size: 20px;
 		line-height: 1.5;
 		margin: 15px 0 20px;
+		white-space: pre-line;
 	}
 	form {
 		display: flex;

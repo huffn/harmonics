@@ -26,9 +26,9 @@ Output goes to `build/`.
 
 ## Before game night
 
-1. In `src/lib/memory/riddles.ts`, replace the `TODO(GM)` placeholders: the three prompts and their accepted answers.
+1. Memory's riddles and accepted answers are in `src/lib/memory/riddles.ts`.
 2. Edit the landing page text in `src/lib/site.ts`.
-3. Rebuild (`npm run build`) and redeploy.
+3. Rebuild (`npm run build`) and redeploy (for GitHub Pages, just push to `main`).
 
 ## GM keys
 
