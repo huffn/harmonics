@@ -37,7 +37,7 @@
 		text-shadow: 0 0 24px #7a5cff88;
 	}
 	p {
-		max-width: 32rem;
+		max-width: 40rem;
 		white-space: pre-line;
 		line-height: 1.8;
 		font-style: italic;
