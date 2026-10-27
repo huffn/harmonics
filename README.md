@@ -66,7 +66,7 @@ Synology Web Station, QNAP and similar are often Apache-based. Put this `.htacce
 
 ```
 RewriteEngine On
-# /heat and /light are also real asset directories; stop Apache redirecting them to /heat/
+# /light is also a real asset directory; stop Apache redirecting it to /light/
 DirectorySlash Off
 # /heat/ -> /heat
 RewriteRule ^(.+)/$ /$1 [R=308,L]
@@ -81,3 +81,11 @@ If the server can do none of this, the puzzles still load at their `.html` names
 ### Smoke test after deploying
 
 Open `/`, then each puzzle path (`/light`, `/rhythm`, `/heat`, `/wind`, `/memory`). Refresh one of them (it should still load, not 404). Try `/heat/`; it should land on `/heat`. `npm run preview` is handy for a local check but is not identical to nginx or Caddy.
+
+### GitHub Pages
+
+`.github/workflows/deploy.yml` builds with `BASE_PATH=/harmonics` and publishes to https://huffn.github.io/harmonics/ on every push to `main`. One-time setup: in the repo's Settings → Pages, set Source to "GitHub Actions".
+
+- The site is public to anyone with the URL, and the answers are readable in the page code. Puzzles need internet at the table.
+- Pages can't redirect, so `/harmonics/heat/` (trailing slash) is a 404; `/harmonics/heat` works.
+- To build for a different repo name, change `BASE_PATH` in the workflow. Leave it unset for the NAS, which serves the site at the root.

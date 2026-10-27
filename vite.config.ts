@@ -11,7 +11,10 @@ export default defineConfig({
 					filename.split(/[/\\]/).includes('node_modules') ? undefined : true
 			},
 			// Static site: default pages/assets output to `build`.
-			adapter: adapter()
+			adapter: adapter(),
+			// Empty for the NAS (served at the root); the GitHub Pages workflow
+			// sets BASE_PATH=/harmonics because Pages serves under /<repo>.
+			paths: { base: (process.env.BASE_PATH ?? '') as '' | `/${string}` }
 		})
 	],
 	test: { include: ['tests/**/*.test.ts'], environment: 'jsdom' }

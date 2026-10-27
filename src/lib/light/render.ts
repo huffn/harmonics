@@ -9,6 +9,7 @@
 //   sparks  HTML sparks, moved by the compositor
 //   bowl    the HTML bowl over the light
 // createBoard builds the layers once; drawDynamic redraws what changes.
+import { asset } from '$app/paths';
 import type { Color } from './geometry';
 import type { Level } from './level';
 import type { TableState } from './state';
@@ -66,7 +67,7 @@ function addDefs(svg: SVGElement, level: Level) {
     el('stop', { offset, 'stop-color': color }, prism));
   for (const name of [...COUNTRIES, 'radiant']) {
     const mask = el('mask', { id: `mask-${name}`, maskUnits: 'userSpaceOnUse', x: 0, y: 0, width: cols, height: rows }, defs);
-    el('image', { href: `/light/assets/mask-${name}.png`, width: cols, height: rows, preserveAspectRatio: 'none' }, mask);
+    el('image', { href: asset(`light/assets/mask-${name}.png` as Parameters<typeof asset>[0]), width: cols, height: rows, preserveAspectRatio: 'none' }, mask);
   }
 }
 
@@ -76,7 +77,7 @@ export function createBoard(stack: HTMLElement, level: Level): SVGSVGElement {
 
   const mapLayer = layer(stack, 'layer-map', 'map-layer', level);
   addDefs(mapLayer, level);
-  el('image', { class: 'map', href: '/light/assets/map-grey.jpg', width: cols, height: rows, preserveAspectRatio: 'none' }, mapLayer);
+  el('image', { class: 'map', href: asset('light/assets/map-grey.jpg'), width: cols, height: rows, preserveAspectRatio: 'none' }, mapLayer);
 
   const glowLayer = layer(stack, 'layer-glow', 'glow-layer', level);
   for (const name of [...COUNTRIES, 'radiant']) {
