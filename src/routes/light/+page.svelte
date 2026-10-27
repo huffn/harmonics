@@ -7,12 +7,15 @@
 	let root: HTMLElement
 
 	onMount(() => {
+		// light.css is scoped to html.light so it cannot leak into other routes.
+		document.documentElement.classList.add('light')
 		const table = mountTable(root)
 		// Advance is a no-op on light: there is a single level.
 		const removeKeys = gmKeys({ reset: table.fullReset })
 		return () => {
 			removeKeys()
 			table.destroy()
+			document.documentElement.classList.remove('light')
 		}
 	})
 </script>

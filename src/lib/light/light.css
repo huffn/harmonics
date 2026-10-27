@@ -1,4 +1,4 @@
-:root {
+html.light {
   --bg: #15131c;
   --panel: #201c29;
   --card: #2a2534;
@@ -13,16 +13,16 @@
   --serif: "Palatino Linotype", Palatino, "Book Antiqua", Georgia, serif;
 }
 
-* { box-sizing: border-box; }
+html.light * { box-sizing: border-box; }
 
 /* Fast clicking at the table must never highlight text. */
-html {
+html.light {
   -webkit-user-select: none;
   user-select: none;
   -webkit-touch-callout: none;
 }
 
-html, body {
+html.light, html.light body {
   margin: 0;
   height: 100%;
   background: radial-gradient(ellipse at center, #241f30 0%, var(--bg) 70%);
@@ -31,14 +31,14 @@ html, body {
   overflow: hidden;
 }
 
-.table {
+html.light .table {
   display: flex;
   height: 100vh;
   gap: 16px;
   padding: 16px;
 }
 
-.board-wrap {
+html.light .board-wrap {
   flex: 1;
   min-width: 0;
   display: flex;
@@ -46,9 +46,9 @@ html, body {
   justify-content: center;
 }
 
-/* The board is a stack of same-sized layers (see src/render.js). The stack
+/* The board is a stack of same-sized layers (see src/lib/light/render.ts). The stack
    keeps the board's 25:15 shape and fits the space beside the panel. */
-.board-stack {
+html.light .board-stack {
   position: relative;
   aspect-ratio: 25 / 15;
   width: min(100%, calc((100vh - 32px) * 25 / 15));
@@ -57,13 +57,13 @@ html, body {
   container-type: inline-size;
   --cell: calc(100cqw / 25);
 }
-.layer { position: absolute; inset: 0; width: 100%; height: 100%; }
-.map-layer, .glow-layer, .halo-layer, .sparks-layer { pointer-events: none; }
-#board { cursor: crosshair; }
+html.light .layer { position: absolute; inset: 0; width: 100%; height: 100%; }
+html.light .map-layer, html.light .glow-layer, html.light .halo-layer, html.light .sparks-layer { pointer-events: none; }
+html.light #board { cursor: crosshair; }
 
-.map { filter: brightness(0.62) contrast(1.05); }
+html.light .map { filter: brightness(0.62) contrast(1.05); }
 
-.grid {
+html.light .grid {
   stroke: #ffffff;
   stroke-opacity: 0.13;
   stroke-width: 0.02;
@@ -71,54 +71,54 @@ html, body {
 }
 
 /* Country glows: each fades in on its own; the whole layer pulses. */
-.glow-layer { mix-blend-mode: screen; will-change: opacity; }
-.glow { opacity: 0; fill-opacity: 0.55; transition: opacity 1.2s ease; }
-.glow.on { opacity: 1; }
-.any-lit .glow-layer { animation: glow-pulse 3.2s ease-in-out 1.2s infinite; }
+html.light .glow-layer { mix-blend-mode: screen; will-change: opacity; }
+html.light .glow { opacity: 0; fill-opacity: 0.55; transition: opacity 1.2s ease; }
+html.light .glow.on { opacity: 1; }
+html.light .any-lit .glow-layer { animation: glow-pulse 3.2s ease-in-out 1.2s infinite; }
 @keyframes glow-pulse { 50% { opacity: 0.72; } }
 
 /* Fixed pieces */
-.pillar { fill: url(#stone); stroke: #1d1915; stroke-width: 0.05; }
-.slot-well { fill: #000; fill-opacity: 0.35; }
-.slot-ring { fill: none; stroke: #d8cfb8; stroke-width: 0.07; stroke-opacity: 0.8; stroke-dasharray: 0.14 0.07; }
+html.light .pillar { fill: url(#stone); stroke: #1d1915; stroke-width: 0.05; }
+html.light .slot-well { fill: #000; fill-opacity: 0.35; }
+html.light .slot-ring { fill: none; stroke: #d8cfb8; stroke-width: 0.07; stroke-opacity: 0.8; stroke-dasharray: 0.14 0.07; }
 
-.emitter-base { fill: #2b2620; stroke: var(--gold); stroke-width: 0.04; }
-.emitter-crystal { fill: var(--white); filter: url(#beam-glow); }
+html.light .emitter-base { fill: #2b2620; stroke: var(--gold); stroke-width: 0.04; }
+html.light .emitter-crystal { fill: var(--white); filter: url(#beam-glow); }
 
-.prism { fill: url(#prism); fill-opacity: 0.85; stroke: #f5f0ff; stroke-width: 0.04; }
-.prism-slot { fill: #000; fill-opacity: 0.35; stroke: #d8cfb8; stroke-width: 0.06; stroke-opacity: 0.8; stroke-dasharray: 0.12 0.06; stroke-linejoin: round; }
-.splitter-piece { cursor: grab; }
+html.light .prism { fill: url(#prism); fill-opacity: 0.85; stroke: #f5f0ff; stroke-width: 0.04; }
+html.light .prism-slot { fill: #000; fill-opacity: 0.35; stroke: #d8cfb8; stroke-width: 0.06; stroke-opacity: 0.8; stroke-dasharray: 0.12 0.06; stroke-linejoin: round; }
+html.light .splitter-piece { cursor: grab; }
 
-.token.prism-token, .drag-ghost.prism-ghost {
+html.light .token.prism-token, html.light .drag-ghost.prism-ghost {
   border: none;
   border-radius: 0;
   clip-path: polygon(50% 0, 100% 100%, 0 100%);
   background: linear-gradient(135deg, var(--green), var(--blue), var(--yellow), var(--red));
 }
-.drag-ghost.prism-ghost { box-shadow: none; }
+html.light .drag-ghost.prism-ghost { box-shadow: none; }
 
-.seal-core { fill: var(--white); opacity: 0; transition: opacity 1.5s ease 1.5s; }
-.seal-half { fill: #4a3f2c; stroke: var(--gold); stroke-width: 0.03; transition: transform 1.6s ease 1.2s; }
-.seal-rim { fill: none; stroke: var(--gold); stroke-width: 0.05; }
+html.light .seal-core { fill: var(--white); opacity: 0; transition: opacity 1.5s ease 1.5s; }
+html.light .seal-half { fill: #4a3f2c; stroke: var(--gold); stroke-width: 0.03; transition: transform 1.6s ease 1.2s; }
+html.light .seal-rim { fill: none; stroke: var(--gold); stroke-width: 0.05; }
 
 /* Beams: halos and impact pools live in their own layer, which pulses whole. */
-.halo-layer { will-change: opacity; animation: beam-pulse 2.4s ease-in-out infinite; }
+html.light .halo-layer { will-change: opacity; animation: beam-pulse 2.4s ease-in-out infinite; }
 @keyframes beam-pulse { 50% { opacity: 0.6; } }
-.beam-halo { stroke-width: 0.26; stroke-opacity: 0.55; stroke-linecap: round; }
-.beam-core { stroke-width: 0.09; stroke-linecap: round; }
-.beam-white.beam-core { stroke-width: 0.12; }
+html.light .beam-halo { stroke-width: 0.26; stroke-opacity: 0.55; stroke-linecap: round; }
+html.light .beam-core { stroke-width: 0.09; stroke-linecap: round; }
+html.light .beam-white.beam-core { stroke-width: 0.12; }
 
 /* The bowl over the light: rattles now and then until the party lifts it.
    It's an HTML element so the rattle and lift are moved by the compositor. */
-.bowl { position: absolute; cursor: pointer; }
-.bowl svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
-.bowl-lift, .bowl-body { position: absolute; inset: 0; }
-.bowl-dome { fill: url(#bronze); stroke: #2a1f12; stroke-width: 0.03; }
-.bowl-rim { fill: #6e5230; stroke: #2a1f12; stroke-width: 0.03; }
-.bowl-shine { fill: none; stroke: #f3dcae; stroke-width: 0.04; stroke-linecap: round; stroke-opacity: 0.6; }
-.bowl-knob { fill: #b48d55; stroke: #2a1f12; stroke-width: 0.025; }
-.bowl-shadow { fill: #000; opacity: 0.4; transition: opacity 0.8s ease; }
-.bowl-body { transform-origin: 50% 74%; will-change: transform; animation: rattle 3.4s ease-in-out 1s infinite; }
+html.light .bowl { position: absolute; cursor: pointer; }
+html.light .bowl svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+html.light .bowl-lift, html.light .bowl-body { position: absolute; inset: 0; }
+html.light .bowl-dome { fill: url(#bronze); stroke: #2a1f12; stroke-width: 0.03; }
+html.light .bowl-rim { fill: #6e5230; stroke: #2a1f12; stroke-width: 0.03; }
+html.light .bowl-shine { fill: none; stroke: #f3dcae; stroke-width: 0.04; stroke-linecap: round; stroke-opacity: 0.6; }
+html.light .bowl-knob { fill: #b48d55; stroke: #2a1f12; stroke-width: 0.025; }
+html.light .bowl-shadow { fill: #000; opacity: 0.4; transition: opacity 0.8s ease; }
+html.light .bowl-body { transform-origin: 50% 74%; will-change: transform; animation: rattle 3.4s ease-in-out 1s infinite; }
 @keyframes rattle {
   0%, 68%, 100% { transform: translate(0, 0) rotate(0); }
   72% { transform: translate(0, -4%) rotate(-7deg); }
@@ -128,23 +128,23 @@ html, body {
   88% { transform: translate(0, 0) rotate(-1.5deg); }
   92% { transform: rotate(0); }
 }
-.bowl-lift { will-change: transform, opacity; transition: transform 1.1s cubic-bezier(0.3, 0, 0.6, 1), opacity 0.9s ease 0.3s; }
-.bowl.lifted { pointer-events: none; }
-.bowl.lifted .bowl-lift { transform: translate(0, -140%); opacity: 0; }
-.bowl.lifted .bowl-body { animation: none; }
-.bowl.lifted .bowl-shadow { opacity: 0; }
+html.light .bowl-lift { will-change: transform, opacity; transition: transform 1.1s cubic-bezier(0.3, 0, 0.6, 1), opacity 0.9s ease 0.3s; }
+html.light .bowl.lifted { pointer-events: none; }
+html.light .bowl.lifted .bowl-lift { transform: translate(0, -140%); opacity: 0; }
+html.light .bowl.lifted .bowl-body { animation: none; }
+html.light .bowl.lifted .bowl-shadow { opacity: 0; }
 
 /* As the bowl lifts, the white beam draws itself out to the north. */
-.unveil .beam-white { stroke-dasharray: 1; animation: draw-beam 1.2s ease-out 0.4s both; }
+html.light .unveil .beam-white { stroke-dasharray: 1; animation: draw-beam 1.2s ease-out 0.4s both; }
 @keyframes draw-beam { from { stroke-dashoffset: 1; } to { stroke-dashoffset: 0; } }
-.unveil .pools, .unveil .sparks-layer { animation: impact-in 0.4s ease 1.5s both; }
+html.light .unveil .pools, html.light .unveil .sparks-layer { animation: impact-in 0.4s ease 1.5s both; }
 @keyframes impact-in { from { opacity: 0; } }
 
 /* Where a beam runs into something: a pool (halo layer) and HTML sparks.
    Spark offsets and sizes are in cells. */
-.impact-pool { opacity: 0.8; }
-.impact { position: absolute; width: 0; height: 0; }
-.spark {
+html.light .impact-pool { opacity: 0.8; }
+html.light .impact { position: absolute; width: 0; height: 0; }
+html.light .spark {
   position: absolute;
   width: calc(var(--size) * var(--cell));
   height: calc(var(--size) * var(--cell));
@@ -164,18 +164,18 @@ html, body {
 }
 
 /* Mirrors */
-.mirror-face { stroke: #e8f4ff; stroke-width: 0.09; stroke-linecap: round; }
-.mirror-back { stroke: #3d4a5c; stroke-width: 0.07; stroke-linecap: round; }
-.ghost .mirror-face { stroke: #ffffff; stroke-opacity: 0.4; stroke-dasharray: 0.08 0.06; }
-.ghost .mirror-back { display: none; }
-.ghost-harmonic { opacity: 0.45; pointer-events: none; }
+html.light .mirror-face { stroke: #e8f4ff; stroke-width: 0.09; stroke-linecap: round; }
+html.light .mirror-back { stroke: #3d4a5c; stroke-width: 0.07; stroke-linecap: round; }
+html.light .ghost .mirror-face { stroke: #ffffff; stroke-opacity: 0.4; stroke-dasharray: 0.08 0.06; }
+html.light .ghost .mirror-back { display: none; }
+html.light .ghost-harmonic { opacity: 0.45; pointer-events: none; }
 
 /* Harmonics on the board */
-.harmonic { stroke: #fff; stroke-width: 0.03; stroke-opacity: 0.5; cursor: grab; }
-.harmonic.lit { filter: url(#beam-glow); stroke-opacity: 1; }
+html.light .harmonic { stroke: #fff; stroke-width: 0.03; stroke-opacity: 0.5; cursor: grab; }
+html.light .harmonic.lit { filter: url(#beam-glow); stroke-opacity: 1; }
 
 /* Panel */
-.panel {
+html.light .panel {
   width: 240px;
   flex: none;
   display: flex;
@@ -187,11 +187,11 @@ html, body {
   overflow-y: auto;
 }
 
-.panel-header { display: flex; align-items: center; gap: 10px; margin-bottom: 4px; }
-#prism-tray { flex: none; width: 30px; height: 28px; }
-#prism-tray .token { width: 30px; height: 28px; }
+html.light .panel-header { display: flex; align-items: center; gap: 10px; margin-bottom: 4px; }
+html.light #prism-tray { flex: none; width: 30px; height: 28px; }
+html.light #prism-tray .token { width: 30px; height: 28px; }
 
-.panel h1 {
+html.light .panel h1 {
   margin: 0;
   font-size: 18px;
   white-space: nowrap;
@@ -200,16 +200,16 @@ html, body {
   letter-spacing: 0.04em;
 }
 
-.card { background: var(--card); border-radius: 8px; padding: 12px; }
-.harmonics-only:not([hidden]) { animation: reveal 1.2s ease both; }
+html.light .card { background: var(--card); border-radius: 8px; padding: 12px; }
+html.light .harmonics-only:not([hidden]) { animation: reveal 1.2s ease both; }
 @keyframes reveal { from { opacity: 0; transform: translateY(8px); } }
-.label { font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); }
-.count { font-size: 28px; margin-top: 2px; }
-.count .of { font-size: 18px; color: var(--muted); }
-.hint { font-size: 13px; line-height: 1.35; color: var(--muted); margin: 8px 0 0; }
+html.light .label { font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); }
+html.light .count { font-size: 28px; margin-top: 2px; }
+html.light .count .of { font-size: 18px; color: var(--muted); }
+html.light .hint { font-size: 13px; line-height: 1.35; color: var(--muted); margin: 8px 0 0; }
 
-.tray { display: flex; gap: 10px; margin-top: 8px; min-height: 34px; }
-.token {
+html.light .tray { display: flex; gap: 10px; margin-top: 8px; min-height: 34px; }
+html.light .token {
   width: 34px;
   height: 34px;
   border-radius: 50%;
@@ -217,13 +217,13 @@ html, body {
   cursor: grab;
   touch-action: none;
 }
-.token[data-color="green"] { background: var(--green); }
-.token[data-color="red"] { background: var(--red); }
-.token[data-color="yellow"] { background: var(--yellow); }
-.token[data-color="blue"] { background: var(--blue); }
-.token.placed { opacity: 0.15; cursor: default; }
+html.light .token[data-color="green"] { background: var(--green); }
+html.light .token[data-color="red"] { background: var(--red); }
+html.light .token[data-color="yellow"] { background: var(--yellow); }
+html.light .token[data-color="blue"] { background: var(--blue); }
+html.light .token.placed { opacity: 0.15; cursor: default; }
 
-.drag-ghost {
+html.light .drag-ghost {
   position: fixed;
   width: 34px;
   height: 34px;
@@ -234,10 +234,10 @@ html, body {
   box-shadow: 0 0 18px currentColor;
 }
 
-.message { min-height: 2.6em; margin: 0; font-style: italic; color: var(--gold); transition: opacity 0.4s; }
-.message:empty { opacity: 0; }
+html.light .message { min-height: 2.6em; margin: 0; font-style: italic; color: var(--gold); transition: opacity 0.4s; }
+html.light .message:empty { opacity: 0; }
 
-.reset {
+html.light .reset {
   margin-top: auto;
   font: inherit;
   color: var(--text);
@@ -247,40 +247,40 @@ html, body {
   padding: 8px;
   cursor: pointer;
 }
-.reset:hover { background: #2f2940; }
+html.light .reset:hover { background: #2f2940; }
 
 
 /* Finale: all four lit. Delays apply only on the way in, so un-solving
    reverses promptly; re-solving plays it again. */
-.beam-halo { transition: stroke-opacity 0.8s ease, stroke-width 0.8s ease; }
-.solved .beam-halo { stroke-opacity: 0.9; stroke-width: 0.4; }
+html.light .beam-halo { transition: stroke-opacity 0.8s ease, stroke-width 0.8s ease; }
+html.light .solved .beam-halo { stroke-opacity: 0.9; stroke-width: 0.4; }
 
-.solved .glow-radiant { opacity: 1; transition: opacity 1.6s ease 0.6s; }
+html.light .solved .glow-radiant { opacity: 1; transition: opacity 1.6s ease 0.6s; }
 
-.seal-bloom {
+html.light .seal-bloom {
   fill: url(#bloom);
   opacity: 0;
   pointer-events: none;
   transform-box: fill-box;
   transform-origin: center;
 }
-.solved .seal-bloom { animation: bloom 2.6s ease-out 0.9s both; }
+html.light .solved .seal-bloom { animation: bloom 2.6s ease-out 0.9s both; }
 @keyframes bloom {
   0% { opacity: 0; transform: scale(0.5); }
   25% { opacity: 0.95; }
   100% { opacity: 0; transform: scale(14); }
 }
 
-.seal-half { transition: transform 0.6s ease, opacity 0.6s ease; }
-.solved .seal-left { transform: translateX(-0.42px); opacity: 0.85; transition: transform 1.6s ease 1.6s, opacity 1.6s ease 1.6s; }
-.solved .seal-right { transform: translateX(0.42px); opacity: 0.85; transition: transform 1.6s ease 1.6s, opacity 1.6s ease 1.6s; }
-.seal-core { transition: opacity 0.6s ease; }
-.solved .seal-core { opacity: 1; filter: url(#beam-glow); transition: opacity 1.4s ease 1.8s; }
-.seal-rim { transition: stroke 1s ease; }
-.solved .seal-rim { stroke: var(--white); transition: stroke 1s ease 1.6s; }
+html.light .seal-half { transition: transform 0.6s ease, opacity 0.6s ease; }
+html.light .solved .seal-left { transform: translateX(-0.42px); opacity: 0.85; transition: transform 1.6s ease 1.6s, opacity 1.6s ease 1.6s; }
+html.light .solved .seal-right { transform: translateX(0.42px); opacity: 0.85; transition: transform 1.6s ease 1.6s, opacity 1.6s ease 1.6s; }
+html.light .seal-core { transition: opacity 0.6s ease; }
+html.light .solved .seal-core { opacity: 1; filter: url(#beam-glow); transition: opacity 1.4s ease 1.8s; }
+html.light .seal-rim { transition: stroke 1s ease; }
+html.light .solved .seal-rim { stroke: var(--white); transition: stroke 1s ease 1.6s; }
 
 /* The table quakes while the seal opens: builds, then dies away. */
-.solved { animation: quake 2.6s linear 1.5s both; }
+html.light .solved { animation: quake 2.6s linear 1.5s both; }
 @keyframes quake {
   0% { transform: translate(0, 0); }
   3.8% { transform: translate(1.2px, 0.5px) rotate(0.05deg); }
@@ -324,15 +324,15 @@ html, body {
 }
 
 /* White light aimed straight at the seal is refused. */
-.rejected { animation: shake 0.6s ease-in-out; }
-.rejected .beam-white { animation: red-pulse 0.7s ease-in-out 2; }
+html.light .rejected { animation: shake 0.6s ease-in-out; }
+html.light .rejected .beam-white { animation: red-pulse 0.7s ease-in-out 2; }
 @keyframes red-pulse { 50% { stroke: #ff2a2a; } }
 
 @media (prefers-reduced-motion: reduce) {
-  .solved, .rejected { animation: none; }
-  .halo-layer, .any-lit .glow-layer, .bowl-body { animation: none; }
-  .unveil .beam-white, .unveil .pools, .unveil .sparks-layer { animation: none; }
-  .spark { display: none; }
-  .solved .seal-bloom { animation: none; }
-  .solved .seal-left, .solved .seal-right { transform: none; opacity: 0; }
+  html.light .solved, html.light .rejected { animation: none; }
+  html.light .halo-layer, html.light .any-lit .glow-layer, html.light .bowl-body { animation: none; }
+  html.light .unveil .beam-white, html.light .unveil .pools, html.light .unveil .sparks-layer { animation: none; }
+  html.light .spark { display: none; }
+  html.light .solved .seal-bloom { animation: none; }
+  html.light .solved .seal-left, html.light .solved .seal-right { transform: none; opacity: 0; }
 }
