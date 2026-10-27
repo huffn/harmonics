@@ -146,6 +146,7 @@ export function applyGuess(s: RhythmState, guess: string): RhythmState {
 }
 
 export function forceWin(s: RhythmState): RhythmState {
+	if (!s.active) return s;
 	return win(s, s.history);
 }
 

@@ -84,6 +84,15 @@ describe('rhythm logic', () => {
 		expect(s.message).toBeNull();
 	});
 	test('forceWin counts as a win', () => expect(forceWin(initialState()).gamesWon).toBe(1));
+	test('forceWin on a finished round is a no-op', () => {
+		const won = applyGuess(initialState(), 'PULSE');
+		expect(forceWin(won)).toBe(won);
+		let lost = initialState();
+		for (let i = 0; i < 10; i++) lost = applyGuess(lost, 'PHASE');
+		expect(forceWin(lost)).toBe(lost);
+	});
+	test('forceWin twice counts once', () =>
+		expect(forceWin(forceWin(initialState())).gamesWon).toBe(1));
 	test('state survives a JSON round-trip and validates', () => {
 		const s = applyGuess(nextRound(initialState()), 'PULSE');
 		const back = JSON.parse(JSON.stringify(s));
