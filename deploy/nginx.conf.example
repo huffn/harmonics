@@ -5,6 +5,8 @@ server {
     server_name _;
     root /srv/puzzles;
     index index.html;
+    gzip on;
+    gzip_types text/css application/javascript application/json image/svg+xml;
 
     # /heat/ -> /heat (then heat.html)
     rewrite ^/(.+)/$ /$1 permanent;
