@@ -2,7 +2,7 @@
 	import { alphabet } from '#lib/heat/logic';
 	import type { HeatGame } from '../game.svelte';
 
-	let { game, disabled = false }: { game: HeatGame; disabled?: boolean } = $props();
+	let { game }: { game: HeatGame } = $props();
 
 	// The default (alphabetic) layout; the Enter and Backspace keys sit on row 2.
 	const layout = [
@@ -14,7 +14,7 @@
 
 	function handleKeydown({ key, altKey, ctrlKey, metaKey, target, repeat }: KeyboardEvent) {
 		// Modified keys are never typing (and keep the GM shortcuts from typing letters).
-		if (altKey || ctrlKey || metaKey || repeat || disabled) return;
+		if (altKey || ctrlKey || metaKey || repeat) return;
 		if (key === 'Backspace') game.undoLetter();
 		if (key === 'Delete') game.undoLetter(false);
 		if (key === 'Enter') {

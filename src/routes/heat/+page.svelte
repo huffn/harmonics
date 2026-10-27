@@ -8,14 +8,11 @@
 	import Board from '#lib/heat/components/Board.svelte';
 	import Keyboard from '#lib/heat/components/Keyboard.svelte';
 	import EndButtons from '#lib/heat/components/EndButtons.svelte';
-	import Tutorial from '#lib/heat/components/Tutorial.svelte';
 	import { HeatGame } from '../../lib/heat/game.svelte';
 	import '../../lib/heat/heat.css';
 
 	// Created on mount: the saved game lives in sessionStorage, which prerendering can't see.
 	let game = $state<HeatGame | null>(null);
-	// The GM's version has no button that opens the tutorial (see the task report).
-	let tutorialOpen = $state(false);
 	// No fade on first paint, as in the original Controls.svelte.
 	let transitionDuration = $state(0);
 
@@ -40,39 +37,29 @@
 
 <div id="main">
 	{#if game}<Toast toasts={game.toasts} />{/if}
-	<div class:minimized={tutorialOpen}>
-		<section>
-			<Header onreroll={game?.rerollWord} />
-			<Board {game} />
-			<section class="controls">
-				{#if game}
-					{#if game.showEndView}
-						<div transition:fade|global={{ duration: transitionDuration, easing: cubicOut }}>
-							<EndButtons state={game.state} onnext={game.nextSequence} />
-						</div>
-					{:else}
-						<div transition:fade|global={{ duration: transitionDuration, easing: cubicOut }}>
-							<Keyboard {game} disabled={tutorialOpen} />
-						</div>
-					{/if}
+	<section>
+		<Header onreroll={game?.rerollWord} />
+		<Board {game} />
+		<section class="controls">
+			{#if game}
+				{#if game.showEndView}
+					<div transition:fade|global={{ duration: transitionDuration, easing: cubicOut }}>
+						<EndButtons state={game.state} onnext={game.nextSequence} />
+					</div>
+				{:else}
+					<div transition:fade|global={{ duration: transitionDuration, easing: cubicOut }}>
+						<Keyboard {game} />
+					</div>
 				{/if}
-			</section>
+			{/if}
 		</section>
-	</div>
-	{#if tutorialOpen}
-		<Tutorial onclose={() => (tutorialOpen = false)} />
-	{/if}
+	</section>
 </div>
 
 <style>
 	#main {
 		max-width: 720px;
 		margin: 0 auto;
-	}
-
-	.minimized {
-		height: 0;
-		overflow: clip;
 	}
 
 	.controls {

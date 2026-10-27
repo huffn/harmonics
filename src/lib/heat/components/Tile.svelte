@@ -27,7 +27,7 @@
 	} = $props();
 
 	// Only tiles that get scored while on screen play the flip; tiles that arrive already
-	// scored (reload, tutorial) don't.
+	// scored (after a reload) don't.
 	const animate = untrack(() => !tile.scored);
 
 	const tileFlipDelay = $derived(tile.id * 150);
