@@ -91,3 +91,13 @@ test('the marking art matches its box', async () => {
   expect((width! / 1674) * 25).toBeCloseTo(level.mark.width, 1);
   expect((height! / 971) * 15).toBeCloseTo(level.mark.height, 1);
 });
+
+// The board stretches the map and every country mask to the same 25×15 box, so
+// they only line up if they share the ancient map's shape.
+test('the country masks have the ancient map’s shape', async () => {
+  const map = await sharp(path.resolve('static/light/assets/map-ancient.jpg')).metadata();
+  for (const name of ['dhruv', 'galatea', 'samitra', 'volund', 'radiant']) {
+    const mask = await sharp(path.resolve(`static/light/assets/mask-${name}.png`)).metadata();
+    expect(mask.height! / mask.width!, name).toBeCloseTo(map.height! / map.width!, 3);
+  }
+});

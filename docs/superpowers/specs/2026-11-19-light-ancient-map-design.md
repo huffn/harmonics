@@ -46,7 +46,7 @@ marking that appears on the table, showing the party where the story goes next.
 ## Non-goals
 
 - No change to the puzzle itself: same slots, pillars, solution and mirror count.
-- No regeneration of the country masks.
+- The country masks are rebuilt only to crop them to the ancient map's shape (it is the old map with the bottom ~2.6% trimmed); their outlines are unchanged.
 
 ## Left to the builder
 

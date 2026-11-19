@@ -51,7 +51,13 @@ async function main() {
     process.exit(1);
   }
 
-  const resized = sharp(source, { limitInputPixels: false }).resize({ width: WIDTH });
+  // The ancient map is this map at the same scale with the bottom trimmed off,
+  // so crop to its shape: the board stretches both to the same box.
+  const ancient = await sharp(path.join(ASSETS, 'map-ancient.jpg')).metadata();
+  const height = Math.round((WIDTH * ancient.height) / ancient.width);
+  const resized = sharp(source, { limitInputPixels: false })
+    .resize({ width: WIDTH })
+    .extract({ left: 0, top: 0, width: WIDTH, height });
   const { data, info } = await resized.clone().ensureAlpha().raw().toBuffer({ resolveWithObject: true });
   const { width: w, height: h } = info;
   console.log(`working size ${w}×${h}`);
