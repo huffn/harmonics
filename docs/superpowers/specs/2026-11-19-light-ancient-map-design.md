@@ -16,7 +16,8 @@ marking that appears on the table, showing the party where the story goes next.
    now fills the gap between The Broken and Savawell Thicket.
 2. **Finale (approach A).** The existing solve sequence is unchanged: the four harmonics
    light, the Radiant Seat glows, the seal splits open (this is the fifth harmonic unlocking),
-   and the table shakes. After that:
+   and the table shakes. The table then waits until someone clicks the opened seal, meaning the
+   party has taken the light harmonic. Then:
    - Every beam path on the board fades out.
    - Five straight beams shoot to the marking: white from the seal, and one from each
      lit harmonic in its own color. They hold, shimmering.

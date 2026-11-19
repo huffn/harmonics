@@ -1,4 +1,5 @@
-// The finale: once all four harmonics are lit, every light on the table runs
+// The finale: once all four harmonics are lit and the party has claimed the
+// light harmonic (clicked the opened seal), every light on the table runs
 // straight to the stone-circle marking. White comes from the opened seal, and
 // each color from wherever its harmonic sits.
 import { COLORS } from './geometry';
@@ -10,7 +11,7 @@ import type { Segment, TraceResult } from './trace';
 const RING = 0.4;
 
 export function convergeBeams(level: Level, s: TableState, result: TraceResult): Segment[] {
-  if (!result.solved) return [];
+  if (!result.solved || !s.lightClaimed) return [];
   const mx = level.mark.x + level.mark.width / 2;
   const my = level.mark.y + level.mark.height / 2;
   const from = (color: string, c: number, r: number): Segment => {

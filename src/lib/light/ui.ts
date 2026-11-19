@@ -60,6 +60,8 @@ export function mountTable(root: HTMLElement): { destroy(): void; fullReset(): v
 
   function update() {
     const result = trace(level, s);
+    // Taking anything off the solved table hands the light harmonic back.
+    if (!result.solved && s.lightClaimed) S.releaseLight(s);
     drawDynamic(stack, level, s, result, { showSolution, converge: convergeBeams(level, s, result) });
     $('mirrors-used').textContent = String(s.mirrors.size);
     $('mirrors-available').textContent = String(s.mirrorsAvailable);
@@ -227,6 +229,15 @@ export function mountTable(root: HTMLElement): { destroy(): void; fullReset(): v
     update();
   });
   listen(svg, 'click', (evt: MouseEvent) => {
+    // The opened seal is the light harmonic: clicking its square means the party takes it.
+    const cell = cellFromEvent(svg, evt);
+    if (cell && cell.c === level.seal.c && cell.r === level.seal.r) {
+      if (!s.lightClaimed && trace(level, s).solved) {
+        S.claimLight(s);
+        update();
+      }
+      return;
+    }
     if (!justDragged && !(evt.target as Element).closest('.harmonic, .splitter-piece')) onBoardClick(evt);
   });
   listen(svg, 'contextmenu', onBoardContextMenu);

@@ -3,7 +3,7 @@
 // fades or moves as a whole, so the browser never has to redraw the busy board
 // every frame (that cost a full CPU core in Safari):
 //   map     the ancient map, drawn once
-//   mark    the stone-circle marking, faded in once the table is solved
+//   mark    the stone-circle marking, faded in once the light harmonic is claimed
 //   shine   the marking's light; the whole layer pulses
 //   glow    country glows; the whole layer pulses
 //   halo    beam halos and impact pools; the whole layer pulses
@@ -230,8 +230,10 @@ export function drawDynamic(
     anyLit = anyLit || on;
   }
   stack.classList.toggle('any-lit', anyLit);
-  settleFinale(stack, result.solved);
+  const claimed = result.solved && s.lightClaimed;
+  settleFinale(stack, claimed);
   stack.classList.toggle('solved', result.solved);
+  stack.classList.toggle('claimed', claimed);
   drawConverge(stack, opts.converge || []);
   rejectAtSeal(stack, result.whiteHitsSeal);
   liftBowl(stack, s.lightUncovered);
@@ -292,13 +294,13 @@ function drawConverge(stack: HTMLElement, beams: Segment[]) {
   }
 }
 
-// The convergence plays once, at the moment of solving. A page that loads
-// already solved shows its end state straight away (finale-settled), until
-// the table is unsolved again.
-function settleFinale(stack: HTMLElement, solved: boolean) {
-  if (solved && stack.dataset.solved === undefined) stack.classList.add('finale-settled');
-  if (!solved) stack.classList.remove('finale-settled');
-  stack.dataset.solved = String(solved);
+// The convergence plays once, when the party claims the light harmonic. A page
+// that loads already claimed shows its end state straight away
+// (finale-settled), until the light is handed back.
+function settleFinale(stack: HTMLElement, claimed: boolean) {
+  if (claimed && stack.dataset.claimed === undefined) stack.classList.add('finale-settled');
+  if (!claimed) stack.classList.remove('finale-settled');
+  stack.dataset.claimed = String(claimed);
 }
 
 // The bowl rises away and the white beam draws itself out, once, at the

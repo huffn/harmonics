@@ -13,11 +13,18 @@ function solvedState(mirrors = level.solution, harmonics: Color[] = ALL) {
   s.lightUncovered = true;
   for (const m of mirrors) s.mirrors.set(`${m.c},${m.r}`, m.angle);
   for (const color of harmonics) s.harmonics[color] = level.answer[color];
+  s.lightClaimed = true;
   return s;
 }
 
 test('no converging beams until solved', () => {
   const s = solvedState(level.solution, ['green', 'red', 'yellow']);
+  expect(convergeBeams(level, s, trace(level, s))).toEqual([]);
+});
+
+test('no converging beams until the light harmonic is claimed', () => {
+  const s = solvedState();
+  s.lightClaimed = false;
   expect(convergeBeams(level, s, trace(level, s))).toEqual([]);
 });
 

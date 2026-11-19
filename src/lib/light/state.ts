@@ -14,6 +14,7 @@ export interface TableState {
   splitterPlaced: boolean;
   harmonicsRevealed: boolean;
   lightUncovered: boolean;
+  lightClaimed: boolean;
 }
 
 export const MAX_MIRRORS = 10;
@@ -47,6 +48,7 @@ export function createState(_level: Level, mirrorsAvailable: number = MAX_MIRROR
     splitterPlaced: false,
     harmonicsRevealed: false,
     lightUncovered: false, // a bowl hides the light until the party lifts it
+    lightClaimed: false, // the opened seal waits for a click before the finale's convergence
   };
 }
 
@@ -98,6 +100,16 @@ export function uncoverLight(s: TableState): void {
   s.lightUncovered = true;
 }
 
+// Clicking the opened seal: the party takes the light harmonic, and the
+// light converges on the marking.
+export function claimLight(s: TableState): void {
+  s.lightClaimed = true;
+}
+
+export function releaseLight(s: TableState): void {
+  s.lightClaimed = false;
+}
+
 // The GM reveals the harmonics panel once the players bring them up.
 export function revealHarmonics(s: TableState): void {
   s.harmonicsRevealed = true;
@@ -111,12 +123,13 @@ export function resetBoard(s: TableState): void {
   s.mirrors.clear();
   for (const color of COLORS) s.harmonics[color] = null;
   s.splitterPlaced = false;
+  s.lightClaimed = false;
 }
 
 export function serialize(s: TableState): string {
   return JSON.stringify({
     mirrorsAvailable: s.mirrorsAvailable, mirrors: [...s.mirrors], harmonics: s.harmonics, splitterPlaced: s.splitterPlaced,
-    harmonicsRevealed: s.harmonicsRevealed, lightUncovered: s.lightUncovered,
+    harmonicsRevealed: s.harmonicsRevealed, lightUncovered: s.lightUncovered, lightClaimed: s.lightClaimed,
   });
 }
 
@@ -144,5 +157,6 @@ export function deserialize(level: Level, str: string): TableState | null {
   s.splitterPlaced = data.splitterPlaced === true;
   s.harmonicsRevealed = data.harmonicsRevealed === true;
   s.lightUncovered = data.lightUncovered === true;
+  s.lightClaimed = data.lightClaimed === true;
   return s;
 }

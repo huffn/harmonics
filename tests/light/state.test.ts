@@ -199,3 +199,19 @@ test('deserialize drops harmonics in unknown or doubled-up slots', () => {
   const back = S.deserialize(level, str);
   expect(back.harmonics).toStrictEqual({ green: 'east', red: null, yellow: null, blue: null });
 });
+
+test('the light harmonic starts unclaimed; claiming survives a reload but not a reset', () => {
+  const s = S.createState(level);
+  expect(s.lightClaimed).toBe(false);
+  S.claimLight(s);
+  expect(S.deserialize(level, S.serialize(s)).lightClaimed).toBe(true);
+  S.resetBoard(s);
+  expect(s.lightClaimed).toBe(false);
+});
+
+test('releasing the light harmonic unclaims it', () => {
+  const s = S.createState(level);
+  S.claimLight(s);
+  S.releaseLight(s);
+  expect(s.lightClaimed).toBe(false);
+});
