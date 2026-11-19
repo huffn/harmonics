@@ -338,9 +338,14 @@ html.light .converge-beam { stroke-linecap: round; stroke-dasharray: 1; }
 html.light .converge-halo .converge-beam { stroke-width: 0.34; stroke-opacity: 0.8; }
 html.light .converge-core .converge-beam { stroke-width: 0.1; }
 html.light .converge-core .converge-white { stroke-width: 0.13; }
-html.light .solved .converge-beam { animation: draw-beam 1.2s ease-in 4.6s both; }
-html.light .converge-halo-layer { will-change: opacity; }
-html.light .solved .converge-halo-layer { animation: mark-pulse 2.4s ease-in-out 7.4s infinite; }
+/* Each beam draws in to the marking, then drains into it (its tail pulls away
+   from the harmonic toward the mark) as the mark starts to pulse with their power. */
+html.light .solved .converge-beam { animation: draw-beam 1.2s ease-in 4.6s both, drain-beam 1.4s ease-in 6.4s forwards; }
+@keyframes drain-beam {
+  from { stroke-dashoffset: 0; opacity: 1; }
+  70% { opacity: 1; }
+  to { stroke-dashoffset: -1; opacity: 0; }
+}
 
 html.light .mark-layer, html.light .shine-layer { opacity: 0; }
 html.light .shine-layer { mix-blend-mode: screen; will-change: opacity; }
@@ -353,8 +358,8 @@ html.light .solved .shine-layer { animation: fade-in 1.4s ease 5.4s both, mark-p
 /* A page loaded already solved shows the end state at once. */
 html.light .finale-settled .beams, html.light .finale-settled .beams-halo, html.light .finale-settled .pools,
 html.light .finale-settled .sparks-layer, html.light .finale-settled .mark-layer { transition: none; }
-html.light .finale-settled .converge-beam { animation: none; }
-html.light .finale-settled .shine-layer, html.light .finale-settled .converge-halo-layer { animation: mark-pulse 2.4s ease-in-out infinite; }
+html.light .finale-settled .converge-beam { animation: none; opacity: 0; }
+html.light .finale-settled .shine-layer { animation: mark-pulse 2.4s ease-in-out infinite; }
 
 /* White light aimed straight at the seal is refused. */
 html.light .rejected { animation: shake 0.6s ease-in-out; }
@@ -370,6 +375,6 @@ html.light .rejected .beam-white { animation: red-pulse 0.7s ease-in-out 2; }
   html.light .solved .seal-left, html.light .solved .seal-right { transform: none; opacity: 0; }
   html.light .solved .beams, html.light .solved .beams-halo, html.light .solved .pools, html.light .solved .sparks-layer,
   html.light .solved .mark-layer { transition: none; }
-  html.light .solved .converge-beam, html.light .solved .converge-halo-layer { animation: none; }
+  html.light .solved .converge-beam { animation: none; opacity: 0; }
   html.light .solved .shine-layer { animation: none; opacity: 0.8; }
 }

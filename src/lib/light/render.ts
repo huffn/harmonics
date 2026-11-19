@@ -8,7 +8,7 @@
 //   glow    country glows; the whole layer pulses
 //   halo    beam halos and impact pools; the whole layer pulses
 //   board   grid, pieces, beam cores, mirrors: the interactive layer
-//   converge-halo, converge   the finale's beams to the marking; the halo layer pulses
+//   converge-halo, converge   the finale's beams, which draw in to the marking and drain into it
 //   sparks  HTML sparks, moved by the compositor
 //   bowl    the HTML bowl over the light
 // createBoard builds the layers once; drawDynamic redraws what changes.
