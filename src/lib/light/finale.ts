@@ -6,11 +6,20 @@ import type { Level } from './level';
 import type { TableState } from './state';
 import type { Segment, TraceResult } from './trace';
 
+// Beams stop on the marking's ring of glyphs (in cells from its center), leaving the compass clear.
+const RING = 0.4;
+
 export function convergeBeams(level: Level, s: TableState, result: TraceResult): Segment[] {
   if (!result.solved) return [];
-  const x2 = level.mark.x + level.mark.width / 2;
-  const y2 = level.mark.y + level.mark.height / 2;
-  const from = (color: string, c: number, r: number): Segment => ({ color, x1: c + 0.5, y1: r + 0.5, x2, y2 });
+  const mx = level.mark.x + level.mark.width / 2;
+  const my = level.mark.y + level.mark.height / 2;
+  const from = (color: string, c: number, r: number): Segment => {
+    const x1 = c + 0.5;
+    const y1 = r + 0.5;
+    const d = Math.hypot(mx - x1, my - y1);
+    const k = (d - RING) / d;
+    return { color, x1, y1, x2: x1 + (mx - x1) * k, y2: y1 + (my - y1) * k };
+  };
   const beams = [from('white', level.seal.c, level.seal.r)];
   for (const color of COLORS) {
     const slot = s.harmonics[color];

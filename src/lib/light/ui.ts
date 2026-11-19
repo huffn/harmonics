@@ -4,6 +4,7 @@
 // never carries over to game night.
 import type { Color } from './geometry';
 import { level } from './level';
+import { convergeBeams } from './finale';
 import { cellFromEvent, COLOR_HEX, createBoard, drawDynamic } from './render';
 import * as S from './state';
 import type { TableState } from './state';
@@ -59,7 +60,7 @@ export function mountTable(root: HTMLElement): { destroy(): void; fullReset(): v
 
   function update() {
     const result = trace(level, s);
-    drawDynamic(stack, level, s, result, { showSolution });
+    drawDynamic(stack, level, s, result, { showSolution, converge: convergeBeams(level, s, result) });
     $('mirrors-used').textContent = String(s.mirrors.size);
     $('mirrors-available').textContent = String(s.mirrorsAvailable);
     $('lit-count').textContent = String(Object.values(result.lit).filter(Boolean).length);

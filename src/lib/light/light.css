@@ -58,7 +58,8 @@ html.light .board-stack {
   --cell: calc(100cqw / 25);
 }
 html.light .layer { position: absolute; inset: 0; width: 100%; height: 100%; }
-html.light .map-layer, html.light .glow-layer, html.light .halo-layer, html.light .sparks-layer { pointer-events: none; }
+html.light .map-layer, html.light .glow-layer, html.light .halo-layer, html.light .sparks-layer,
+html.light .mark-layer, html.light .shine-layer, html.light .converge-halo-layer, html.light .converge-layer { pointer-events: none; }
 html.light #board { cursor: crosshair; }
 
 html.light .map { filter: brightness(0.62) contrast(1.05); }
@@ -323,6 +324,37 @@ html.light .solved { animation: quake 2.6s linear 1.5s both; }
   90% { transform: translate(-1px, 1px); }
 }
 
+/* After the quake (over about 4.1s after solving), the board's beams fade
+   and every light runs straight to the marking, which appears and pulses.
+   Unsolving hides it all at once. */
+html.light .beams, html.light .beams-halo, html.light .pools, html.light .sparks-layer { transition: opacity 0.3s ease; }
+html.light .solved .beams, html.light .solved .beams-halo, html.light .solved .pools, html.light .solved .sparks-layer {
+  opacity: 0;
+  transition: opacity 0.8s ease 4.2s;
+}
+
+html.light .converge-beam { stroke-linecap: round; stroke-dasharray: 1; }
+html.light .converge-halo .converge-beam { stroke-width: 0.34; stroke-opacity: 0.8; }
+html.light .converge-core .converge-beam { stroke-width: 0.1; }
+html.light .converge-core .converge-white { stroke-width: 0.13; }
+html.light .solved .converge-beam { animation: draw-beam 1.2s ease-in 4.6s both; }
+html.light .converge-halo-layer { will-change: opacity; }
+html.light .solved .converge-halo-layer { animation: mark-pulse 2.4s ease-in-out 7.4s infinite; }
+
+html.light .mark-layer, html.light .shine-layer { opacity: 0; }
+html.light .shine-layer { mix-blend-mode: screen; will-change: opacity; }
+html.light .mark-bloom { fill: url(#bloom); opacity: 0.7; }
+html.light .solved .mark-layer { opacity: 1; transition: opacity 1.4s ease 5.4s; }
+html.light .solved .shine-layer { animation: fade-in 1.4s ease 5.4s both, mark-pulse 2.4s ease-in-out 6.8s infinite; }
+@keyframes fade-in { from { opacity: 0; } to { opacity: 1; } }
+@keyframes mark-pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.55; } }
+
+/* A page loaded already solved shows the end state at once. */
+html.light .finale-settled .beams, html.light .finale-settled .beams-halo, html.light .finale-settled .pools,
+html.light .finale-settled .sparks-layer, html.light .finale-settled .mark-layer { transition: none; }
+html.light .finale-settled .converge-beam { animation: none; }
+html.light .finale-settled .shine-layer, html.light .finale-settled .converge-halo-layer { animation: mark-pulse 2.4s ease-in-out infinite; }
+
 /* White light aimed straight at the seal is refused. */
 html.light .rejected { animation: shake 0.6s ease-in-out; }
 html.light .rejected .beam-white { animation: red-pulse 0.7s ease-in-out 2; }
@@ -335,4 +367,8 @@ html.light .rejected .beam-white { animation: red-pulse 0.7s ease-in-out 2; }
   html.light .spark { display: none; }
   html.light .solved .seal-bloom { animation: none; }
   html.light .solved .seal-left, html.light .solved .seal-right { transform: none; opacity: 0; }
+  html.light .solved .beams, html.light .solved .beams-halo, html.light .solved .pools, html.light .solved .sparks-layer,
+  html.light .solved .mark-layer { transition: none; }
+  html.light .solved .converge-beam, html.light .solved .converge-halo-layer { animation: none; }
+  html.light .solved .shine-layer { animation: none; opacity: 0.8; }
 }

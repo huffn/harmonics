@@ -21,13 +21,18 @@ test('no converging beams until solved', () => {
   expect(convergeBeams(level, s, trace(level, s))).toEqual([]);
 });
 
-test('five beams end on the marking: white from the seal, each color from its harmonic', () => {
+test('five beams run to the marking: white from the seal, each color from its harmonic', () => {
   const s = solvedState();
   const beams = convergeBeams(level, s, trace(level, s));
   const mx = level.mark.x + level.mark.width / 2;
   const my = level.mark.y + level.mark.height / 2;
   expect(beams.map((b) => b.color)).toEqual(['white', 'green', 'red', 'yellow', 'blue']);
-  for (const b of beams) expect([b.x2, b.y2]).toEqual([mx, my]);
+  // Each stops on the marking's ring of glyphs, pointing at its center, leaving the compass clear.
+  for (const b of beams) {
+    expect(Math.hypot(b.x2 - mx, b.y2 - my)).toBeCloseTo(0.4, 6);
+    const cross = (b.x2 - b.x1) * (my - b.y1) - (b.y2 - b.y1) * (mx - b.x1);
+    expect(cross).toBeCloseTo(0, 6);
+  }
   expect([beams[0].x1, beams[0].y1]).toEqual([12.5, 1.5]); // the seal
   expect([beams[1].x1, beams[1].y1]).toEqual([3.5, 4.5]); // green in Dhruv
 });

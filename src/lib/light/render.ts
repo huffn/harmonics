@@ -3,9 +3,12 @@
 // fades or moves as a whole, so the browser never has to redraw the busy board
 // every frame (that cost a full CPU core in Safari):
 //   map     the ancient map, drawn once
+//   mark    the stone-circle marking, faded in once the table is solved
+//   shine   the marking's light; the whole layer pulses
 //   glow    country glows; the whole layer pulses
 //   halo    beam halos and impact pools; the whole layer pulses
 //   board   grid, pieces, beam cores, mirrors: the interactive layer
+//   converge-halo, converge   the finale's beams to the marking; the halo layer pulses
 //   sparks  HTML sparks, moved by the compositor
 //   bowl    the HTML bowl over the light
 // createBoard builds the layers once; drawDynamic redraws what changes.
@@ -13,7 +16,7 @@ import { asset } from '$app/paths';
 import type { Color } from './geometry';
 import type { Level } from './level';
 import type { TableState } from './state';
-import type { TraceResult } from './trace';
+import type { Segment, TraceResult } from './trace';
 
 const NS = 'http://www.w3.org/2000/svg';
 export const COLOR_HEX: Record<string, string> = { white: '#fffbe8', green: '#4ade80', red: '#f87171', yellow: '#facc15', blue: '#60a5fa' };
@@ -65,6 +68,16 @@ function addDefs(svg: SVGElement, level: Level) {
   const prism = el('linearGradient', { id: 'prism', x1: '0', y1: '0', x2: '1', y2: '1' }, defs);
   [['0%', '#4ade80'], ['33%', '#60a5fa'], ['66%', '#facc15'], ['100%', '#f87171']].forEach(([offset, color]) =>
     el('stop', { offset, 'stop-color': color }, prism));
+  // Turns the marking's ink into light: solid warm white with a soft edge.
+  const m = level.mark;
+  const shine = el('filter', {
+    id: 'mark-light', filterUnits: 'userSpaceOnUse', x: m.x - 0.5, y: m.y - 0.5, width: m.width + 1, height: m.height + 1,
+  }, defs);
+  el('feColorMatrix', { type: 'matrix', values: '0 0 0 0 1  0 0 0 0 0.98  0 0 0 0 0.88  0 0 0 1 0', result: 'ink' }, shine);
+  el('feGaussianBlur', { in: 'ink', stdDeviation: '0.05', result: 'soft' }, shine);
+  const merge = el('feMerge', {}, shine);
+  el('feMergeNode', { in: 'soft' }, merge);
+  el('feMergeNode', { in: 'ink' }, merge);
   for (const name of [...COUNTRIES, 'radiant']) {
     const mask = el('mask', { id: `mask-${name}`, maskUnits: 'userSpaceOnUse', x: 0, y: 0, width: cols, height: rows }, defs);
     el('image', { href: asset(`light/assets/mask-${name}.png` as Parameters<typeof asset>[0]), width: cols, height: rows, preserveAspectRatio: 'none' }, mask);
@@ -78,6 +91,13 @@ export function createBoard(stack: HTMLElement, level: Level): SVGSVGElement {
   const mapLayer = layer(stack, 'layer-map', 'map-layer', level);
   addDefs(mapLayer, level);
   el('image', { class: 'map', href: asset('light/assets/map-ancient.jpg'), width: cols, height: rows, preserveAspectRatio: 'none' }, mapLayer);
+
+  const m = level.mark;
+  const markArt = { href: asset('light/assets/mark.png'), x: m.x, y: m.y, width: m.width, height: m.height, preserveAspectRatio: 'none' };
+  el('image', { class: 'map', ...markArt }, layer(stack, 'layer-mark', 'mark-layer', level));
+  const shineLayer = layer(stack, 'layer-shine', 'shine-layer', level);
+  el('circle', { class: 'mark-bloom', cx: m.x + m.width / 2, cy: m.y + m.height / 2, r: 1.1 }, shineLayer);
+  el('image', { ...markArt, filter: 'url(#mark-light)' }, shineLayer);
 
   const glowLayer = layer(stack, 'layer-glow', 'glow-layer', level);
   for (const name of [...COUNTRIES, 'radiant']) {
@@ -130,6 +150,9 @@ export function createBoard(stack: HTMLElement, level: Level): SVGSVGElement {
   el('g', { class: 'pieces' }, svg);
   el('g', { class: 'solution' }, svg);
 
+  el('g', { class: 'converge-halo' }, layer(stack, 'layer-converge-halo', 'converge-halo-layer', level));
+  el('g', { class: 'converge-core' }, layer(stack, 'layer-converge', 'converge-layer', level));
+
   div('layer sparks-layer', stack);
 
   // The bowl over the light, on top of everything so it can be clicked.
@@ -159,7 +182,8 @@ function mirrorShape(parent: Element, c: number, r: number, angle: number, cls: 
 }
 
 export function drawDynamic(
-  stack: HTMLElement, level: Level, s: TableState, result: TraceResult, opts: { showSolution?: boolean } = {},
+  stack: HTMLElement, level: Level, s: TableState, result: TraceResult,
+  opts: { showSolution?: boolean; converge?: Segment[] } = {},
 ) {
   const halos = stack.querySelector('.beams-halo')!;
   const beams = stack.querySelector('.beams')!;
@@ -206,7 +230,9 @@ export function drawDynamic(
     anyLit = anyLit || on;
   }
   stack.classList.toggle('any-lit', anyLit);
+  settleFinale(stack, result.solved);
   stack.classList.toggle('solved', result.solved);
+  drawConverge(stack, opts.converge || []);
   rejectAtSeal(stack, result.whiteHitsSeal);
   liftBowl(stack, s.lightUncovered);
 
@@ -247,6 +273,32 @@ function drawImpacts(stack: HTMLElement, level: Level, impacts: TraceResult['imp
         ` --size:${(0.1 + 0.04 * (i % 3)).toFixed(2)}; animation-delay:${((i * 0.37) % 1.6).toFixed(2)}s`;
     }
   }
+}
+
+// The finale's beams to the marking. They are rebuilt only when they change,
+// so an unrelated redraw while solved does not restart their draw-out.
+function drawConverge(stack: HTMLElement, beams: Segment[]) {
+  const key = JSON.stringify(beams);
+  if (stack.dataset.converge === key) return;
+  stack.dataset.converge = key;
+  const halos = stack.querySelector('.converge-halo')!;
+  const cores = stack.querySelector('.converge-core')!;
+  halos.innerHTML = '';
+  cores.innerHTML = '';
+  for (const g of beams) {
+    const line = { x1: g.x1, y1: g.y1, x2: g.x2, y2: g.y2, pathLength: 1, stroke: COLOR_HEX[g.color] };
+    el('line', { class: `converge-beam converge-${g.color}`, ...line, filter: 'url(#beam-glow)' }, halos);
+    el('line', { class: `converge-beam converge-${g.color}`, ...line }, cores);
+  }
+}
+
+// The convergence plays once, at the moment of solving. A page that loads
+// already solved shows its end state straight away (finale-settled), until
+// the table is unsolved again.
+function settleFinale(stack: HTMLElement, solved: boolean) {
+  if (solved && stack.dataset.solved === undefined) stack.classList.add('finale-settled');
+  if (!solved) stack.classList.remove('finale-settled');
+  stack.dataset.solved = String(solved);
 }
 
 // The bowl rises away and the white beam draws itself out, once, at the
