@@ -104,28 +104,3 @@ export function keepComponents(mask: Uint8Array, w: number, h: number, seeds: nu
   }
   return out;
 }
-
-// Paints over a rectangle (e.g. a map label) in place by copying the pixels
-// `dy` rows above it, which keeps the surrounding texture. Within `feather`
-// pixels of the rectangle's edge it blends into the original. Pixels where
-// `inside(x, y)` is false are left alone (e.g. the map's rounded frame).
-export function patchFromAbove(
-  rgba: Uint8Array | Uint8ClampedArray,
-  w: number,
-  h: number,
-  rect: { x0: number; y0: number; x1: number; y1: number },
-  dy: number,
-  feather: number,
-  inside: (x: number, y: number) => boolean = () => true
-) {
-  for (let y = rect.y0; y < rect.y1; y++) {
-    for (let x = rect.x0; x < rect.x1; x++) {
-      if (!inside(x, y)) continue;
-      const edge = Math.min(x - rect.x0, rect.x1 - 1 - x, y - rect.y0, rect.y1 - 1 - y);
-      const t = feather > 0 ? Math.min(1, (edge + 1) / feather) : 1;
-      const i = (y * w + x) * 4;
-      const src = ((y - dy) * w + x) * 4;
-      for (let ch = 0; ch < 3; ch++) rgba[i + ch] = Math.round(rgba[i + ch] * (1 - t) + rgba[src + ch] * t);
-    }
-  }
-}

@@ -74,3 +74,20 @@ test('each slot sits inside its country and the seal in the Radiant Seat', async
   }
   expect((await maskValue('radiant', level.seal)) > 128,  'seal outside the Radiant Seat').toBeTruthy();
 });
+
+test('the marking sits in cell (12,9), straight below the seal', () => {
+  const cx = level.mark.x + level.mark.width / 2;
+  const cy = level.mark.y + level.mark.height / 2;
+  expect(Math.floor(cx)).toBe(12);
+  expect(Math.floor(cy)).toBe(9);
+  expect(Math.floor(cx)).toBe(level.seal.c);
+});
+
+test('the marking art matches its box', async () => {
+  const file = path.resolve('static/light/assets/mark.png');
+  const { width, height, hasAlpha } = await sharp(file).metadata();
+  expect(hasAlpha).toBe(true);
+  // The 1674×971 map is stretched onto the 25×15 board.
+  expect((width! / 1674) * 25).toBeCloseTo(level.mark.width, 1);
+  expect((height! / 971) * 15).toBeCloseTo(level.mark.height, 1);
+});

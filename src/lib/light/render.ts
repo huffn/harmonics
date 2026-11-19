@@ -2,7 +2,7 @@
 // Anything that animates continuously lives in a layer of its own and only
 // fades or moves as a whole, so the browser never has to redraw the busy board
 // every frame (that cost a full CPU core in Safari):
-//   map     the greyscale map, drawn once
+//   map     the ancient map, drawn once
 //   glow    country glows; the whole layer pulses
 //   halo    beam halos and impact pools; the whole layer pulses
 //   board   grid, pieces, beam cores, mirrors: the interactive layer
@@ -77,7 +77,7 @@ export function createBoard(stack: HTMLElement, level: Level): SVGSVGElement {
 
   const mapLayer = layer(stack, 'layer-map', 'map-layer', level);
   addDefs(mapLayer, level);
-  el('image', { class: 'map', href: asset('light/assets/map-grey.jpg'), width: cols, height: rows, preserveAspectRatio: 'none' }, mapLayer);
+  el('image', { class: 'map', href: asset('light/assets/map-ancient.jpg'), width: cols, height: rows, preserveAspectRatio: 'none' }, mapLayer);
 
   const glowLayer = layer(stack, 'layer-glow', 'glow-layer', level);
   for (const name of [...COUNTRIES, 'radiant']) {

@@ -1,5 +1,5 @@
-// Turns the GM's colored world map into the table's assets:
-//   assets/map-grey.jpg       the greyscale display map
+// Turns the GM's colored world map into each country's glow mask (the table
+// itself is drawn on the ancient map; see build-ancient.mjs):
 //   assets/mask-<name>.png    each country's shape (greyscale alpha); the page
 //                             colors its glow through this mask
 // Usage: node tools/light/build-assets.mjs [path/to/source-map.png]  (default: tools/light/source/fabula-map.png, git-ignored)
@@ -7,20 +7,13 @@ import fs from 'node:fs';
 import path from 'node:path';
 import sharp from 'sharp';
 
-import { classify, fillHoles, smoothEdge, keepComponents, patchFromAbove } from './masks.ts';
+import { classify, fillHoles, smoothEdge, keepComponents } from './masks.ts';
 
 const DEFAULT_SOURCE = path.resolve(import.meta.dirname, 'source', 'fabula-map.png');
 const ASSETS = path.resolve(import.meta.dirname, '..', '..', 'static', 'light', 'assets');
 const WIDTH = 4000;
 const TOL = 28;
 const EDGE_RADIUS = 6;
-
-// The map's distance scale bar (bottom right), painted out with the sea
-// texture directly above it, but only inside the frame's rounded corner.
-// 2000×1192 coordinates.
-const SCALE_BAR = { x0: 1690, y0: 1131, x1: 1992, y1: 1179 };
-const SCALE_BAR_LIFT = 56;
-const FRAME_CORNER = { cx: 1950, cy: 1132.5, r: 45 }; // the rounded corner's arc, inset slightly
 
 // Seeds are in 2000×1192 coordinates (see the plan); scaled to WIDTH below.
 const COUNTRIES = {
@@ -64,17 +57,6 @@ async function main() {
   console.log(`working size ${w}×${h}`);
 
   const scale = w / 2000;
-  const sc = (r) => Object.fromEntries(Object.entries(r).map(([k, v]) => [k, Math.round(v * scale)]));
-  const display = Buffer.from(data);
-  const corner = { cx: FRAME_CORNER.cx * scale, cy: FRAME_CORNER.cy * scale, r: FRAME_CORNER.r * scale };
-  const insideFrame = (x, y) =>
-    x < corner.cx || y < corner.cy || (x - corner.cx) ** 2 + (y - corner.cy) ** 2 < corner.r ** 2;
-  patchFromAbove(display, w, h, sc(SCALE_BAR), Math.round(SCALE_BAR_LIFT * scale), Math.round(5 * scale), insideFrame);
-  await sharp(display, { raw: { width: w, height: h, channels: 4 } })
-    .greyscale()
-    .jpeg({ quality: 82 })
-    .toFile(path.join(ASSETS, 'map-grey.jpg'));
-
   for (const [name, { seeds }] of Object.entries(COUNTRIES)) {
     const pts = seeds.map(([x, y]) => [Math.round(x * scale), Math.round(y * scale)]);
     const refs = pts.map(([x, y]) => sampleColor(data, w, x, y));

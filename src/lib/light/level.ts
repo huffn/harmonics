@@ -14,6 +14,8 @@ export interface Level {
 	emitter: Cell;
 	splitter: Cell;
 	seal: Cell;
+	// The stone-circle marking revealed when the puzzle is solved: its box in board units.
+	mark: { x: number; y: number; width: number; height: number };
 	slots: Record<string, Cell>;
 	answer: Record<Color, string>;
 	pillars: Cell[];
@@ -26,6 +28,8 @@ export const level: Level = {
   emitter: { c: 10, r: 9 }, // the "RO" of The Broken
   splitter: { c: 13, r: 4 },
   seal: { c: 12, r: 1 },
+  // From tools/light/build-ancient.mjs; centered in cell (12,9), straight below the seal.
+  mark: { x: 11.41, y: 8.56, width: 1.31, height: 1.25 },
   // Temple slots, one per country. Any harmonic fits any slot.
   slots: {
     dhruv: { c: 3, r: 4 },
